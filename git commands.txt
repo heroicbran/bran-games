@@ -1,0 +1,13 @@
+"git clone [link here]"
+
+Change directory to newly cloned. Use "git init".
+
+(git pull)
+
+git commit -a (or specific file) -m "Message here"
+
+git push
+
+git status
+
+git add .  // Add all
