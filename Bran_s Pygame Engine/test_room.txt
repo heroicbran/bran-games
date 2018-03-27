@@ -1,0 +1,19 @@
+# Test Room
+
+
+# Wall_Blocks
+#000, 050
+#070, 070
+#075, 075
+100, 400
+# Objects
+
+# Mobs
+
+
+$ - END OF SECTION
+
+
+
+
+@ - END OF FILE

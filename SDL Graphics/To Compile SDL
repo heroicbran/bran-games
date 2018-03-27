@@ -1,0 +1,3 @@
+g++ [name_here].cpp -lSDL2 -o [NAME_HERE]
+
+g++ name.cpp -w -lSDL2 -lSDL2_image -o name
