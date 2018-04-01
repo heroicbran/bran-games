@@ -6,7 +6,7 @@
 using namespace std;
 
 const int s_width = 1280;
-const int s_height = 760;
+const int s_height = 760;//
 
 
 int initialize(SDL_Window* &window, SDL_Surface* &screenSurface)
