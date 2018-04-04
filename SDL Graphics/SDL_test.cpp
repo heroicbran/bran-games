@@ -37,7 +37,7 @@ int initialize(SDL_Window* &window, SDL_Surface* &screenSurface)
   }
   else
   {
-    window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, s_width, s_height, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("SDL Engine", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, s_width, s_height, SDL_WINDOW_SHOWN);
 
     if (window == NULL)
     {
@@ -74,7 +74,9 @@ void load_images()
 
 int main()
 {
-  int there = 0;
+  //int there = 0;
+  int inv = 0; //Inventory
+  int inter = 0; //Interact
   int quit = 0;
   SDL_Event evt;
   SDL_Window* window;
@@ -106,10 +108,40 @@ int main()
     if(evt.type == SDL_QUIT)
       quit = 1;
 
-    if(evt.type == SDL_KEYDOWN && evt.key.keysym.sym == SDLK_DOWN)
+    //REPLACE WITH BUTTON CHECK FUNCTION!
+    if(evt.type == SDL_KEYDOWN)
     {
-      pc.y += 10;
-      cout << pc.y << endl;
+      switch(evt.key.keysym.sym)
+      {
+        case SDLK_DOWN:
+          pc.y += 10;
+          break;
+
+        case SDLK_RIGHT:
+          pc.x += 10;
+          break;
+
+        case SDLK_LEFT:
+          pc.x -= 10;
+          break;
+
+        case SDLK_UP:
+          pc.y -= 10;
+          break;
+
+        case SDLK_ESCAPE:
+          quit = 1;
+          break;
+
+        case SDLK_z:
+          //Interact flag toggle
+          break;
+
+        case SDLK_x:
+          //Inventory flag toggle
+          inv = 1;
+          break;
+      }
     }
     //Different drawings based on state/room
     //SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
@@ -121,6 +153,15 @@ int main()
     pc_rect = {pc.x, pc.y, 100, 100};
     SDL_BlitSurface(g, NULL, screenSurface, &pc_rect);
     SDL_UpdateWindowSurface(window);
+
+    //Draw HUD-related
+    //Inventory (REPLACE WITH FUNCTION)
+    if (inv == 1)
+    {
+      SDL_Rect inv_rect = {0, 450, 1280, 500};
+      SDL_FillRect(screenSurface, &inv_rect, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+    }
+    //Text boxes
   }
 
   SDL_DestroyWindow(window);
