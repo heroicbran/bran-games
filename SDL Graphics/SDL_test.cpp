@@ -75,7 +75,7 @@ void load_images()
 int main()
 {
   int menu = 0; // Menu flag
-  string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/examine/etc)"
+  string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/examine/combine)"
   int cursor = 0; // main (0,1,2/3,4,5), inv(0,1,2,3), inv2(0,1,2)
   int inv = 0; //Inventory
   int inter = 0; //Interact
