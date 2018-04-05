@@ -74,7 +74,8 @@ void load_images()
 
 int main()
 {
-  //int there = 0;
+  int menu = 0; // Menu flag
+  string menu_type = "main"; // "main (3x2)", "inv(1x4)", ""
   int inv = 0; //Inventory
   int inter = 0; //Interact
   int quit = 0;
@@ -99,6 +100,7 @@ int main()
   //Setup Game Stuff
   Mob pc = Mob("Bran", 100, 100);
   SDL_Rect pc_rect;
+  SDL_Rect hud_rect;
   while(!quit)
   {
     SDL_UpdateWindowSurface(window);
@@ -114,19 +116,23 @@ int main()
       switch(evt.key.keysym.sym)
       {
         case SDLK_DOWN:
-          pc.y += 10;
+          if (menu == 0)
+            pc.y += 10;
           break;
 
         case SDLK_RIGHT:
-          pc.x += 10;
+          if (menu == 0)
+            pc.x += 10;
           break;
 
         case SDLK_LEFT:
-          pc.x -= 10;
+          if (menu == 0)
+            pc.x -= 10;
           break;
 
         case SDLK_UP:
-          pc.y -= 10;
+          if (menu == 0)
+            pc.y -= 10;
           break;
 
         case SDLK_ESCAPE:
@@ -139,7 +145,16 @@ int main()
 
         case SDLK_x:
           //Inventory flag toggle
-          inv = 1;
+          if (menu == 0)
+          {
+            menu = 1;
+            cout << menu << endl;
+          }
+          else
+          {
+            menu = 0;
+            cout << menu << endl;
+          }
           break;
       }
     }
@@ -154,14 +169,49 @@ int main()
     SDL_BlitSurface(g, NULL, screenSurface, &pc_rect);
     SDL_UpdateWindowSurface(window);
 
+    //Draw Other Players(s)
+
     //Draw HUD-related
     //Inventory (REPLACE WITH FUNCTION)
-    if (inv == 1)
+    if (menu == 1)
     {
-      SDL_Rect inv_rect = {0, 450, 1280, 500};
-      SDL_FillRect(screenSurface, &inv_rect, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+      //Hides in-game image
+      //HUD Background
+      hud_rect = {0, 450, 1280, 500};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+      /////////////////////////////
+      //Profile Image
+      hud_rect = {50, 500, 200, 200};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xBB, 0xFF));
+      /////////////////////////////////
+      //Menu Slots
+      hud_rect = {400, 500, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
+
+      hud_rect = {675, 500, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
+
+      hud_rect = {950, 500, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
+
+      hud_rect = {400, 625, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
+
+      hud_rect = {675, 625, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
+
+      hud_rect = {950, 625, 250, 100};
+      SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+      //Actual Menu Image
     }
     //Text boxes
+
+    //Clear everything? / Renderer?
   }
 
   SDL_DestroyWindow(window);
