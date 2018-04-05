@@ -75,7 +75,8 @@ void load_images()
 int main()
 {
   int menu = 0; // Menu flag
-  string menu_type = "main"; // "main (3x2)", "inv(1x4)", ""
+  string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/examine/etc)"
+  int cursor = 0; // main (0,1,2/3,4,5), inv(0,1,2,3), inv2(0,1,2)
   int inv = 0; //Inventory
   int inter = 0; //Interact
   int quit = 0;
@@ -148,18 +149,14 @@ int main()
           if (menu == 0)
           {
             menu = 1;
-            cout << menu << endl;
           }
-          else
+          else if (menu == 1 && menu_type == "main")
           {
             menu = 0;
-            cout << menu << endl;
           }
           break;
       }
     }
-    //Different drawings based on state/room
-    //SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
@@ -172,6 +169,7 @@ int main()
     //Draw Other Players(s)
 
     //Draw HUD-related
+
     //Inventory (REPLACE WITH FUNCTION)
     if (menu == 1)
     {
@@ -183,6 +181,71 @@ int main()
       //Profile Image
       hud_rect = {50, 500, 200, 200};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xBB, 0xFF));
+
+      ////////////////////
+      //Cursor
+      if (menu_type == "main")
+      {
+        switch(cursor)
+        {
+          case 0:
+            hud_rect = {390, 490, 270, 120};      //-10,-10, +20, +20 vs original
+            break;
+          case 1:
+            hud_rect = {665, 490, 270, 120};
+            break;
+          case 2:
+            hud_rect = {940, 490, 270, 120};
+            break;
+          case 3:
+            hud_rect = {390, 625, 200, 200};
+            break;
+          case 4:
+            hud_rect = {665, 625, 200, 200};
+            break;
+          case 5:
+            hud_rect = {940, 625, 200, 200};
+            break;
+        }
+        SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xE3, 0x86, 0x34));
+      }
+      else if (menu_type == "inv")
+      {
+        switch(cursor)
+        {
+          case 0:
+            hud_rect = {50, 500, 200, 200};
+            break;
+          case 1:
+            hud_rect = {50, 500, 200, 200};
+            break;
+          case 2:
+            hud_rect = {50, 500, 200, 200};
+            break;
+          case 3:
+            hud_rect = {50, 500, 200, 200};
+            break;
+        }
+        SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xBB, 0xFF));
+      }
+      else if (menu_type == "inv2")
+      {
+        switch(cursor)
+        {
+          case 0:
+            hud_rect = {50, 500, 200, 200};
+            break;
+          case 1:
+            hud_rect = {50, 500, 200, 200};
+            break;
+          case 2:
+            hud_rect = {50, 500, 200, 200};
+            break;
+        }
+        SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xBB, 0xFF));
+      }
+
+
       /////////////////////////////////
       //Menu Slots
       hud_rect = {400, 500, 250, 100};
