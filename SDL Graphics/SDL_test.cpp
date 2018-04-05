@@ -74,7 +74,7 @@ void load_images()
 int main()
 {
   int menu = 0; // Menu flag
-  string menu_type = "inv"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/combine/examine)"
+  string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/combine/examine/trade)"
   int cursor = 0; // main (0,1,2/3,4,5), inv(0,1,2,3), inv2(0,1,2)
   int inv = 0; //Inventory flag
   int inter = 0; //Interact flag
@@ -123,21 +123,208 @@ int main()
         case SDLK_DOWN:
           if (menu == 0)
             pc.y += 10;
+          else
+          {
+            if (menu_type == "main")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 3;
+                  break;
+                case 1:
+                  cursor = 4;
+                  break;
+                case 2:
+                  cursor = 5;
+                  break;
+                case 3:
+                  cursor = 0;
+                  break;
+                case 4:
+                  cursor = 1;
+                  break;
+                case 5:
+                  cursor = 2;
+                  break;
+              }
+            }
+            else if (menu_type == "inv")
+            {
+              //Unused
+            }
+            else if (menu_type == "inv2")
+            {
+              case 0:
+                cursor = 1;
+                break;
+              case 1:
+                cursor = 2;
+                break;
+              case 2:
+                cursor = 0;
+                break;
+            }
+          }
           break;
 
         case SDLK_RIGHT:
           if (menu == 0)
             pc.x += 10;
+          else
+          {
+            if (menu_type == "main")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 1;
+                  break;
+                case 1:
+                  cursor = 2;
+                  break;
+                case 2:
+                  cursor = 0;
+                  break;
+                case 3:
+                  cursor = 4;
+                  break;
+                case 4:
+                  cursor = 5;
+                  break;
+                case 5:
+                  cursor = 3;
+                  break;
+              }
+            }
+            else if (menu_type == "inv")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 1;
+                  break;
+                case 1:
+                  cursor = 2;
+                  break;
+                case 2:
+                  cursor = 3;
+                  break;
+                case 3:
+                  cursor = 0;
+                  break;
+              }
+            }
+            else if (menu_type == "inv2")
+            {
+              //Unused
+            }
+          }
           break;
 
         case SDLK_LEFT:
           if (menu == 0)
             pc.x -= 10;
+          else
+          {
+            if (menu_type == "main")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 2;
+                  break;
+                case 1:
+                  cursor = 0;
+                  break;
+                case 2:
+                  cursor = 1;
+                  break;
+                case 3:
+                  cursor = 5;
+                  break;
+                case 4:
+                  cursor = 3;
+                  break;
+                case 5:
+                  cursor = 4;
+                  break;
+              }
+            }
+            else if (menu_type == "inv")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 3;
+                  break;
+                case 1:
+                  cursor = 0;
+                  break;
+                case 2:
+                  cursor = 1;
+                  break;
+                case 3:
+                  cursor = 2;
+                  break;
+              }
+            }
+            else if (menu_type == "inv2")
+            {
+              //Unused
+            }
+          }
           break;
 
         case SDLK_UP:
           if (menu == 0)
             pc.y -= 10;
+          else
+          {
+            if (menu_type == "main")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 3;
+                  break;
+                case 1:
+                  cursor = 4;
+                  break;
+                case 2:
+                  cursor = 5;
+                  break;
+                case 3:
+                  cursor = 0;
+                  break;
+                case 4:
+                  cursor = 1;
+                  break;
+                case 5:
+                  cursor = 2;
+                  break;
+              }
+            }
+            else if (menu_type == "inv")
+            {
+              //Unused
+            }
+            else if (menu_type == "inv2")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  cursor = 2;
+                  break;
+                case 1:
+                  cursor = 0;
+                  break;
+                case 2:
+                  cursor = 1;
+                  break;
+              }
+            }
+          }
           break;
 
         case SDLK_ESCAPE:
@@ -146,6 +333,27 @@ int main()
 
         case SDLK_z:
           //Interact flag toggle
+          if (menu == 0)
+          {
+            //Interact button?
+          }
+          else
+          {
+            if (menu_type == "main")
+            {
+              switch(cursor)
+              {
+                case 0:
+                  menu_type = "inv";
+                  cursor = 0;
+                  break;
+              }
+            }
+            else if (menu_type == "inv")
+            {
+
+            }
+          }
           break;
 
         case SDLK_x:
@@ -162,7 +370,8 @@ int main()
             }
             else if (menu_type == "inv")
             {
-              menu_type == "main";
+              menu_type = "main";
+              cursor = 0;
             }
           }
           break;
@@ -212,13 +421,13 @@ int main()
             hud_rect = {940, 490, 270, 120};
             break;
           case 3:
-            hud_rect = {390, 625, 270, 120};
+            hud_rect = {390, 615, 270, 120};
             break;
           case 4:
-            hud_rect = {665, 625, 270, 120};
+            hud_rect = {665, 615, 270, 120};
             break;
           case 5:
-            hud_rect = {940, 625, 270, 120};
+            hud_rect = {940, 615, 270, 120};
             break;
         }
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xE3, 0x86, 0x34));
@@ -260,16 +469,16 @@ int main()
         switch(cursor)
         {
           case 0:
-            hud_rect = {50, 500, 200, 200};
+            hud_rect = {337, 510, 200, 200};
             break;
           case 1:
-            hud_rect = {50, 500, 200, 200};
+            hud_rect = {537, 510, 200, 200};
             break;
           case 2:
-            hud_rect = {50, 500, 200, 200};
+            hud_rect = {737, 510, 200, 200};
             break;
           case 3:
-            hud_rect = {50, 500, 200, 200};
+            hud_rect = {937, 510, 200, 200};
             break;
         }
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xE3, 0x86, 0x34));
