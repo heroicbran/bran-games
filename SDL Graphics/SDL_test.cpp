@@ -74,7 +74,7 @@ void load_images()
 int main()
 {
   int menu = 0; // Menu flag
-  string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/examine/combine)"
+  string menu_type = "inv"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/combine/examine)"
   int cursor = 0; // main (0,1,2/3,4,5), inv(0,1,2,3), inv2(0,1,2)
   int inv = 0; //Inventory flag
   int inter = 0; //Interact flag
@@ -154,9 +154,16 @@ int main()
           {
             menu = 1;
           }
-          else if (menu == 1 && menu_type == "main")
+          else
           {
-            menu = 0;
+            if (menu_type == "main")
+            {
+              menu = 0;
+            }
+            else if (menu_type == "inv")
+            {
+              menu_type == "main";
+            }
           }
           break;
       }
@@ -271,19 +278,20 @@ int main()
         //menu slot background
         ////////
         //Menu Slots
-        hud_rect = {400, 500, 250, 100};
+        ///////
+        hud_rect = {350, 525, 175, 175};
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
         //Actual Menu Image
 
-        hud_rect = {675, 500, 250, 100};
+        hud_rect = {550, 525, 175, 175};
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
         //Actual Menu Image
 
-        hud_rect = {950, 500, 250, 100};
+        hud_rect = {750, 525, 175, 175};
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
         //Actual Menu Image
 
-        hud_rect = {400, 625, 250, 100};
+        hud_rect = {950, 525, 175, 175};
         SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
         //Actual Menu Image
 
