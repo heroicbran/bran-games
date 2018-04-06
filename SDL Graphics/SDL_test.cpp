@@ -31,8 +31,8 @@ struct Door
 {
   string name = "door";
   string state = "closed"; //or open
-  string density = "solid";
-  string icon;
+  string icon = "door.png";
+  SDL_Rect rect;
 
 
   void interact()
@@ -102,11 +102,15 @@ int main()
 
   initialize(window, screenSurface);
 
+  //Setup Images
   SDL_Surface* g;
   g = IMG_Load("G.png");
 
   SDL_Surface* img;
   img = IMG_Load("Cursor.png");
+
+  SDL_Surface* door;
+  door = IMG_Load("door.png");
 
   SDL_UpdateWindowSurface(window);
 
@@ -122,8 +126,12 @@ int main()
   SDL_Rect pc_rect;
   SDL_Rect hud_rect;
 
+  //DOOR_TEST
   Door door1 = Door();
-  cout << door1.name << endl;
+  door1.rect = {50, 50, 100, 100};
+  //Have file with entire layout and such.
+  //Make list of rects for walls, doors, etc.
+  //Draw by stepping through lists
 
   while(!quit)
   {
@@ -189,7 +197,10 @@ int main()
 
         case SDLK_RIGHT:
           if (menu == 0)
-            pc.x += 10;
+            if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_FALSE)    //DOOR_TEST
+              pc.x += 10;
+            else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open")
+              pc.x += 10;
           else
           {
             if (menu_type == "main")
@@ -362,6 +373,15 @@ int main()
           if (menu == 0)
           {
             //Interact button?
+            //DOOR_TEST
+            if (abs(pc.y - door1.rect.y) <= 100 && pc.x == door1.rect.x) //If next to door...
+            {
+              if(door1.state == "closed")
+                door1.state = "open";
+              else
+                door1.state = "closed";
+              cout << door1.state <<" " <<pc.y << " " << door1.rect.y << abs(pc.y - door1.rect.y)  <<endl;
+            }
           }
           else
           {
@@ -407,6 +427,10 @@ int main()
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
+    //Draw Room
+    if (door1.state == "closed")
+      SDL_BlitSurface(door, NULL, screenSurface, &(door1.rect));
+
     //Draw Player
     pc_rect = {pc.x, pc.y, 100, 100};
     SDL_BlitSurface(g, NULL, screenSurface, &pc_rect);
@@ -414,8 +438,9 @@ int main()
 
     //Draw Other Players(s)
 
+    ///
     //Draw HUD-related
-
+    ////
     //Menu (REPLACE WITH FUNCTION)
     if (menu == 1)
     {
