@@ -1,0 +1,11 @@
+CYOA: Main
+
+Input: Has all the controls/button presses
+
+Mobs: Draws players and appearances
+
+Object: Controls objects/items
+
+Rooms: Controls room generation and room objects
+
+Network: For network

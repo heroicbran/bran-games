@@ -1,0 +1,15 @@
+CONTINUE ON MENU "HIGHLIGHT" and DO MENU TRANSITION (btwn main, inv (Can't scroll w/o item), inv2
+
+
+FEATURES
+*Wall collis
+*Door control (SEARCH WITH DOOR TEST)
+*Pick up items -> Add to inventory
+----------------
+*Code organization
+*Room generation (Server size)
+*RPC communication
+
+
+FIXES
+*See about fixing stop during new direction?
