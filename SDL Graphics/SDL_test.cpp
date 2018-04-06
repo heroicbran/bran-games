@@ -27,6 +27,21 @@ struct Mob
   }
 };
 
+struct Door
+{
+  string name = "door";
+  string state = "closed"; //or open
+  string density = "solid";
+  string icon;
+
+
+  void interact()
+  {
+      //Put in player button press.
+  }
+
+};
+
 int initialize(SDL_Window* &window, SDL_Surface* &screenSurface)
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -106,6 +121,10 @@ int main()
   pc.inventory.push_back("none");
   SDL_Rect pc_rect;
   SDL_Rect hud_rect;
+
+  Door door1 = Door();
+  cout << door1.name << endl;
+
   while(!quit)
   {
     SDL_UpdateWindowSurface(window);
@@ -202,8 +221,12 @@ int main()
               switch(cursor)
               {
                 case 0:
-                  cursor = 1;
+                  if (pc.inventory[0] == "none")
+                    hud_rect = {0, 0, 0, 0};
+                  else
+                    cursor = 1;
                   break;
+
                 case 1:
                   cursor = 2;
                   break;
@@ -232,7 +255,7 @@ int main()
               switch(cursor)
               {
                 case 0:
-                  cursor = 2;
+                    cursor = 2;
                   break;
                 case 1:
                   cursor = 0;
@@ -256,7 +279,10 @@ int main()
               switch(cursor)
               {
                 case 0:
-                  cursor = 3;
+                  if (pc.inventory[0] == "none")
+                    hud_rect = {0, 0, 0, 0};
+                  else
+                    cursor = 3;
                   break;
                 case 1:
                   cursor = 0;
@@ -469,7 +495,10 @@ int main()
         switch(cursor)
         {
           case 0:
-            hud_rect = {337, 510, 200, 200};
+            if (pc.inventory[0] == "none")
+              hud_rect = {0, 0, 0, 0};
+            else
+              hud_rect = {337, 510, 200, 200};
             break;
           case 1:
             hud_rect = {537, 510, 200, 200};
