@@ -16,6 +16,10 @@ FEATURES
 >> Using RPC
 > Server sends mob/room updates to everyone else
 
+>> 1 thread per PC to take all info from players
+>> 1 thread to talk back?
+>> 1 thread to handle updates
+
 
 FIXES
 *See about fixing stop during new direction?
