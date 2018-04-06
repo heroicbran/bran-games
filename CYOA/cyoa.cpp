@@ -92,9 +92,9 @@ int main()
 
   SDL_UpdateWindowSurface(window);
 
+  //Set up network stuff
 
-
-  //Setup Game Stuff
+  //Set up Player Stuff
   Mob pc = Mob("Bran", 100, 100);
   //PC Inventory
   pc.inventory.push_back("none");
@@ -105,11 +105,9 @@ int main()
   SDL_Rect hud_rect;
 
   //DOOR_TEST
-  Door door1 = Door();
-  door1.rect = {50, 50, 100, 100};
-  //Have file with entire layout and such.
-  //Make list of rects for walls, doors, etc.
-  //Draw by stepping through lists
+  //Door door1 = Door();
+  //door1.rect = {50, 50, 100, 100};
+
 
   while(!quit)
   {

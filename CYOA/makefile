@@ -1,5 +1,5 @@
-rpcp2p: rpcp2p.cc
-	g++ -std=c++11 rpcp2p.cc -lrpc -lpthread -o server
+server: server.cpp
+	g++ -std=c++11 server.cpp -lrpc -lpthread -o server
 
 .PHONY: clean
 
