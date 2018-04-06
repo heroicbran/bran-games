@@ -2,13 +2,19 @@ CONTINUE ON MENU "HIGHLIGHT" and DO MENU TRANSITION (btwn main, inv (Can't scrol
 
 
 FEATURES
-*Wall collis
-*Door control (SEARCH WITH DOOR TEST)
+*Wall collis 
+*Door control (SEARCH WITH DOOR TEST) [WORKING]
 *Pick up items -> Add to inventory
 ----------------
 *Code organization
-*Room generation (Server size)
+*Room generation (Server side)
+> Server will use a file (or files) to generate initial room state.
 *RPC communication
+> Will use server to manage game world.
+> CLient can manage self.
+> Client sends updates of mob structure (and room when room affected w/ spinlocks)
+>> Using RPC
+> Server sends mob/room updates to everyone else
 
 
 FIXES
