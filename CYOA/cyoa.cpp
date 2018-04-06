@@ -4,12 +4,12 @@
 #include <iostream>
 #include <vector>
 
-#include <images.cpp>
-#include <rooms.cpp>
-#include <mobs.cpp>
-#include <input.cpp>
-#include <objects.cpp>
-#include <network.cpp>
+#include "images.cpp"
+#include "rooms.cpp"
+#include "mobs.cpp"
+#include "input.cpp"
+#include "objects.cpp"
+#include "network.cpp"
 
 
 using namespace std;
@@ -112,13 +112,13 @@ int main()
 
   //Setup Images
   SDL_Surface* g;
-  g = IMG_Load("G.png");
+  g = IMG_Load("images/G.png");
 
   SDL_Surface* img;
-  img = IMG_Load("Cursor.png");
+  img = IMG_Load("images/Cursor.png");
 
   SDL_Surface* door;
-  door = IMG_Load("door.png");
+  door = IMG_Load("images/door.png");
 
   SDL_UpdateWindowSurface(window);
 
@@ -205,10 +205,12 @@ int main()
 
         case SDLK_RIGHT:
           if (menu == 0)
+          {
             if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_FALSE)    //DOOR_TEST
               pc.x += 10;
             else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open")
               pc.x += 10;
+          }
           else
           {
             if (menu_type == "main")
@@ -415,6 +417,7 @@ int main()
           if (menu == 0)
           {
             menu = 1;
+            cursor = 0;
           }
           else
           {
