@@ -1,4 +1,5 @@
 #include "objects.h"
+#include <map>
 using namespace std;
 
 struct Room
@@ -6,9 +7,9 @@ struct Room
   int room_id;
   string room_name;
   vector<Wall> wall_list;
-  vector<Door> door_list;
+  map<int,int> door_list; //Key = id, value = state
   //vector<Tile>tile_list;
-  //vector<Item> item_list;
+  map<string,int> item_list; //Key = name, value = quantity
 
 
 };

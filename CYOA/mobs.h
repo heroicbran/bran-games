@@ -4,10 +4,11 @@ struct Mob
   int x;
   int y;
   vector<string> inventory;
-  int room_id = 0; //Room being occupied by mob
-  int is_player = 0; //Used for PC
+  int current_room = 0; //Room being occupied by mob
+  //int is_player = 0; //Used for PC
+  int player_id;
 
-  Mob() : name{"test"}, x{0}, y{0}
+  Mob(string n) : name{n}, x{0}, y{0}
   {
 
   }
@@ -15,5 +16,10 @@ struct Mob
   Mob(string n, int posx, int posy) : name{n}, x{posx}, y{posy}
   {
 
+  }
+
+  Mob()
+  {
+    
   }
 };

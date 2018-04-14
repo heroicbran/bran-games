@@ -59,7 +59,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           /*if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_FALSE)    //DOOR_TEST
             pc.x += 10;
-          else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open*/
+          else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open)*/
             pc.x += 10;
         }
         else

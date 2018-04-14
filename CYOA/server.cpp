@@ -14,13 +14,11 @@
 #include "rooms.h"
 #include "mobs.h"
 //#include "objects.h"
-#include "network.h"
+#include "network.h" //Functions for actions over network
 #include "inventory.h"
 
 using namespace std;
 
-vector<Mob> mob_list;
-vector<Room>room_list;
 //Maps for mob list and room list
 
 int get_id()
@@ -38,16 +36,6 @@ int type_select()
 
 }
 
-void setup_rooms()
-{
-  //Read rooms from file and add them to room vector
-}
-
-void setup_mob()
-{
-  //Create a player mob and add to mob vector
-}
-
 int main()
 {
   string ip;
@@ -57,7 +45,9 @@ int main()
   int peer_id = 0;
   int room_count = 0;
   int mob_count = 0;
-
+  map<int, Mob> mob_list;
+  map<int, Room>room_list;
+  
   select = type_select();
   //Initialize Rooms (or Load previous state)
 

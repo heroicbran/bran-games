@@ -1,0 +1,7 @@
+// Format
+//===========
+//# (Room ID)
+//"name" (Room name)
+//w w.x w.y (Wall and its coords)
+//d d.x d.y (Door and its coords)
+//i i.name (Item and its coords)
