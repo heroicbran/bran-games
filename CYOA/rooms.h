@@ -1,10 +1,4 @@
-#include <SDL2/SDL.h>
-#include<SDL2/SDL_image.h>
-#include <stdio.h>
-#include <iostream>
-#include <vector>
-
-#include "objects.cpp"
+#include "objects.h"
 using namespace std;
 
 struct Room
@@ -15,4 +9,6 @@ struct Room
   vector<Door> door_list;
   //vector<Tile>tile_list;
   //vector<Item> item_list;
+
+
 };

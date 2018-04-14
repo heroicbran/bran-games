@@ -1,7 +1,9 @@
-server: server.cpp
+cyoa: server.cpp client.cpp
 	g++ -std=c++11 server.cpp -lrpc -lpthread -o server
+	g++ -std=c++11 client.cpp -lrpc -lpthread -w -lSDL2 -lSDL2_image -o client
 
 .PHONY: clean
 
-clean: server ./peer1/peer1 ./peer2/peer2 ./peer3/peer3 ./peer4/peer4
+clean: server client
 	rm server
+	rm client
