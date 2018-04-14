@@ -4,14 +4,14 @@
 #include <iostream>
 #include <vector>
 
-#include "images.cpp"
-#include "rooms.cpp"
-#include "mobs.cpp"
-#include "input.cpp"
-//#include "objects.cpp" (redundant)
-#include "network.cpp"
-#include "menu.cpp"
-#include "inventory.cpp"
+#include "images.h"
+#include "rooms.h"
+#include "mobs.h"
+#include "input.h"
+//#include "objects.h" (redundant)
+#include "network.h"
+#include "menu.h"
+#include "inventory.h"
 
 
 using namespace std;

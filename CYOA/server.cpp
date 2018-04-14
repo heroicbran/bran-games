@@ -11,21 +11,17 @@
 #include <dirent.h>
 #include <chrono>
 
-#include "rooms.cpp"
-#include "mobs.cpp"
-//#include "objects.cpp"
-#include "network.cpp"
-#include "inventory.cpp"
+#include "rooms.h"
+#include "mobs.h"
+//#include "objects.h"
+#include "network.h"
+#include "inventory.h"
 
 using namespace std;
 
 vector<Mob> mob_list;
 vector<Room>room_list;
-
-
-
-
-
+//Maps for mob list and room list
 
 int get_id()
 {
