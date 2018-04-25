@@ -4,7 +4,7 @@ using namespace std;
 
 struct Room
 {
-  int room_id;
+  int id;
   string room_name;
   vector<Wall> wall_list;
   map<int,int> door_list; //Key = id, value = state

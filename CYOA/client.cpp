@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-
+#include "rpc/client.h"
 #include "images.h"
 #include "rooms.h"
 #include "mobs.h"
@@ -19,8 +19,13 @@ using namespace std;
 const int s_width = 1280;
 const int s_height = 760;
 
+int initialize_player()
+{
 
-int initialize(SDL_Window* &window, SDL_Surface* &screenSurface)
+  return 1;
+}
+
+int initialize_SDL(SDL_Window* &window, SDL_Surface* &screenSurface)
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
@@ -72,13 +77,17 @@ int main()
   int inv = 0; //Inventory flag
   int inter = 0; //Interact flag
   int quit = 0;
+  int port = 10000;
   SDL_Event evt;
   SDL_Window* window;
   SDL_Surface* screenSurface;
 
-  //1 grid spot is 50x50
+  //1 grid spot is 50x50 pixels
+  //initialize_player();
 
-  initialize(window, screenSurface);
+  rpc::client client("127.0.0.1", port);
+
+  initialize_SDL(window, screenSurface);
 
   //Setup Images
   SDL_Surface* g;
@@ -138,7 +147,7 @@ int main()
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface);
 
     //Clear everything? / Renderer?
-    }
+  }
 
   SDL_DestroyWindow(window);
   cout << "QUITTING!" <<endl;

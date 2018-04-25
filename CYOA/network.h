@@ -1,11 +1,52 @@
+#include <fstream>
+#include <string>
 ////////////////
 // Room Functions
 //////////////////
 
 Room setup_room(string name) //Argument is room file name
 {
-
   //Read room from file and add them to room vector
+  string buffer;
+  ifstream reader;
+  reader.open("rooms/test");
+  int id;
+  Room* new_room = new Room();
+  while(reader >> buffer)
+  {
+
+    switch(buffer[0])
+    {
+      case '#':
+        reader >> new_room->id;
+        break;
+      case 'n':
+
+        break;
+      case 'w':
+        int x;
+        reader >> x;
+        int y;
+        reader >> y;
+        Wall* new_wall = new Wall(x, y);
+        new_room->wall_list.push_back(*new_wall);
+
+        //reader >> new_room.;
+        //re
+        break;
+    }
+  }
+
+  return *new_room;
+
+
+
+
+
+
+
+
+
 }
 
 void update_items(int room_id, string item_name, int action, map<int, Room> &room_list) //action is 1 = obtain, 0 = dropped

@@ -7,13 +7,14 @@ using namespace std;
 
 struct Wall
 {
-  string name = "wall";
+  //string name = "wall";
   //string icon = "w.png"; : public Wall
   SDL_Rect rect;
 
-  Wall(string n, SDL_Rect r) : name{n}, rect{r}
+  Wall(int x, int y)
   {
-
+    rect.x = x;
+    rect.y = y;
   }
 };
 
@@ -53,7 +54,7 @@ struct Door
     return state;
   }
 
-  Door(int i, string ic, SDL_Rect r, int s) : id{i}, icon{ic}, rect{r}, state{s} 
+  Door(int i, string ic, SDL_Rect r, int s) : id{i}, icon{ic}, rect{r}, state{s}
   {
 
   }

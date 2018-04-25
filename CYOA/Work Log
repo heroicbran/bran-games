@@ -2,7 +2,7 @@ CONTINUE ON MENU "HIGHLIGHT" and DO MENU TRANSITION (btwn main, inv (Can't scrol
 
 
 FEATURES
-*Wall collis 
+*Wall collis
 *Door control (SEARCH WITH DOOR TEST) [WORKING]
 *Pick up items -> Add to inventory
 ----------------
@@ -23,3 +23,18 @@ FEATURES
 
 FIXES
 *See about fixing stop during new direction?
+
+
+
+
+
+TO DO
+===========
+[ ] Enable Server hosting and user connection
+    [ ] Generate a mob
+    [ ] Place in starter area
+
+[ ] Make a test room that has functioning wallz, itemz, and doorz for (server + one user)
+    [ ] Client - Server communication
+
+[ ] Extend to room generation from file(s)
