@@ -1,11 +1,15 @@
 TO DO
 ===========
-[ ] Enable Server hosting and user connection
-    [ ] Establish Connection
+[X] Enable Server hosting and user connection
+    [X] Establish Connection
     [X] Generate a mob
-    [ ] Place in starter area
+    [X] Place in starter area
 
-[ ] Make a test room that a functioning wall, item, and door
+[ ] Make a test room with a functionality
+    [ ] Fuctioning Wall
+    [ ] Fuctioning Door
+    [ ] Fuctioning Item
+    [ ] Fuctioning Player 2
     [ ] Client - Server communication
     [ ] Object State Updating
     [ ] Make sure each works as intended

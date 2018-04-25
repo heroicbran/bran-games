@@ -7,7 +7,7 @@ struct Mob
   int current_room = 0; //Room being occupied by mob
   //int is_player = 0; //Used for PC
   int player_id;
-  MSGPACK_DEFINE_ARRAY(x, y, inventory, current_room, player_id);  //Note: Needed to make RPC function with custom type.
+  MSGPACK_DEFINE_ARRAY(name, x, y, inventory, current_room, player_id);  //Note: Needed to make RPC function with custom type.
 
   Mob(string n) : name{n}, x{0}, y{0}
   {

@@ -52,6 +52,7 @@ void check_rooms()
 void player_update(Mob pc)
 {
   mob_list[pc.name] = pc;
+  cout << mob_list[pc.name].name;// << " updated: " << mob_list[pc.name].x << " " << mob_list[pc.name].y <<endl;
 }
 
 
