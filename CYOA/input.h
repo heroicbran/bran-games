@@ -1,6 +1,6 @@
-//Add functions for simplicity?
+#include "rpc/client.h"
 
-void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit)
+void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client)
 {
     if(evt.type == SDL_KEYDOWN)
   {
@@ -8,7 +8,10 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
     {
       case SDLK_DOWN:
         if (menu == 0)
+        {
           pc.y += 10;
+          client.call("player_update", pc);    //Supplies updated player data
+        }
         else
         {
           if (menu_type == "main")
@@ -61,6 +64,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             pc.x += 10;
           else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open)*/
             pc.x += 10;
+            client.call("player_update", pc);    //Supplies updated player data
         }
         else
         {
@@ -119,7 +123,11 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
 
       case SDLK_LEFT:
         if (menu == 0)
+        {
           pc.x -= 10;
+          client.call("player_update", pc);    //Supplies updated player data
+        }
+
         else
         {
           if (menu_type == "main")
@@ -176,7 +184,10 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
 
       case SDLK_UP:
         if (menu == 0)
+        {
           pc.y -= 10;
+          client.call("player_update", pc);    //Supplies updated player data
+        }
         else
         {
           if (menu_type == "main")

@@ -71,6 +71,7 @@ void load_images()
 
 int main()
 {
+  string name;
   int menu = 0; // Menu flag
   string menu_type = "main"; // "main (2x3)", "inv (1x4)", "inv2 (3x1 use/combine/examine/trade)"
   int cursor = 0; // main (0,1,2/3,4,5), inv(0,1,2,3), inv2(0,1,2)
@@ -83,9 +84,11 @@ int main()
   SDL_Surface* screenSurface;
 
   //1 grid spot is 50x50 pixels
-  //initialize_player();
 
+  //Set up network stuff
   rpc::client client("127.0.0.1", port);
+  cout << "Enter your name: ";
+  cin >> name;
 
   initialize_SDL(window, screenSurface);
 
@@ -101,16 +104,20 @@ int main()
 
   SDL_UpdateWindowSurface(window);
 
-  //Set up network stuff
 
   //Set up Player Stuff
-  Mob pc = Mob("Bran", 100, 100);
+  Mob pc = client.call("add_player", name).as<Mob>();    //Retrieves initial player data
+
+  if (pc.name.length() > 0)
+    cout << pc.name << " has been added." << endl;
+
   //PC Inventory
   pc.inventory.push_back("none");
   pc.inventory.push_back("none");
   pc.inventory.push_back("none");
   pc.inventory.push_back("none");
-  SDL_Rect pc_rect;
+
+  SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};;
   SDL_Rect hud_rect;
 
   //DOOR_TEST
@@ -127,7 +134,9 @@ int main()
     if(evt.type == SDL_QUIT)
       quit = 1;
 
-    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit);
+    //Do special events/cutscenes?
+
+    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client);
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
@@ -142,6 +151,7 @@ int main()
     SDL_UpdateWindowSurface(window);
 
     //Draw Other Players(s)
+
 
     //Draw HUD-related
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface);

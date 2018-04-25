@@ -1,5 +1,27 @@
-CONTINUE ON MENU "HIGHLIGHT" and DO MENU TRANSITION (btwn main, inv (Can't scroll w/o item), inv2
+TO DO
+===========
+[ ] Enable Server hosting and user connection
+    [ ] Establish Connection
+    [X] Generate a mob
+    [ ] Place in starter area
 
+[ ] Make a test room that a functioning wall, item, and door
+    [ ] Client - Server communication
+    [ ] Object State Updating
+    [ ] Make sure each works as intended
+
+[ ] Extend to room generation from file(s)
+
+
+
+DEBUGGING
+===========
+[ ] See about fixing stop during new direction?
+
+
+Scratch Pad
+=============
+Cross Compiling?
 
 FEATURES
 *Wall collis
@@ -19,22 +41,3 @@ FEATURES
 >> 1 thread per PC to take all info from players
 >> 1 thread to talk back?
 >> 1 thread to handle updates
-
-
-FIXES
-*See about fixing stop during new direction?
-
-
-
-
-
-TO DO
-===========
-[ ] Enable Server hosting and user connection
-    [ ] Generate a mob
-    [ ] Place in starter area
-
-[ ] Make a test room that has functioning wallz, itemz, and doorz for (server + one user)
-    [ ] Client - Server communication
-
-[ ] Extend to room generation from file(s)

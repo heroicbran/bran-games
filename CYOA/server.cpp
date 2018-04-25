@@ -5,6 +5,7 @@
 #include <fstream>
 #include <list>
 #include "rpc/server.h"
+#include "rpc/client.h"
 #include "rpc/this_session.h"
 #include "rpc/this_server.h"
 #include <dirent.h>
@@ -20,15 +21,22 @@ using namespace std;
 
 //Maps for mob list and room list
 map<string, Mob> mob_list;
-map<string, Room>room_list;
+map<string, Room>room_list; //Room ID: Name needed for mob control
 
-string test_func(string name)
+Mob add_player(string name)
 {
   Mob* newMob = new Mob(name);
 
   if (mob_list.find(name) == mob_list.end())
+  {
     mob_list[name] = *newMob;
-  return "confirmation";
+    cout << "New Player: " << mob_list[name].name << endl;
+  }
+  else
+  {
+    //Make mob with modified name with num attached?
+  }
+  return mob_list[name];
 }
 
 void check_mobs()
@@ -41,21 +49,11 @@ void check_rooms()
 
 }
 
-
-int get_id()
+void player_update(Mob pc)
 {
-  //cout << "Peer " <<++pcount <<" has connected!" <<endl;
-  return 0;
+  mob_list[pc.name] = pc;
 }
 
-int type_select()
-{
-  int sel;
-  cout << "Select operation mode (Server = 1, Peer = 2): ";
-  cin >> sel;
-  return sel;
-
-}
 
 int main()
 {
@@ -68,27 +66,20 @@ int main()
   int mob_count = 0;
 
 
-  select = type_select();
-  //Initialize Rooms (or Load previous state)
-
-
   //Process for server
-  cout << "This process will operate as the Server." <<endl <<endl;
-  //cout << "Select the port that will be used for listening: ";
-  //cin >> port;
-  //cout << endl;
-  cout << "The server is now active." <<endl;
 
   //Set up server, bind each of the commands for peer
   rpc::server server(port);
-  server.bind("test", &test_func);
-  //Update Mob
-  //Update room (with lock)
+  server.bind("add_player", &add_player);
+  server.bind("player_update", &player_update);
+
   server.async_run(1);
+  cout << "The server is now active." <<endl;
 
 
   //Initialize Game State (Rooms)
   Room testRoom = Room();
+  room_list["test_room"] = testRoom;
 
   while(quit == 0)
   {
