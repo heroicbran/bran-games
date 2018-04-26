@@ -9,19 +9,22 @@ TO DO
     [ ] Fuctioning Wall
     [ ] Fuctioning Door
     [ ] Fuctioning Item
-    [ ] Fuctioning Player 2
-    [ ] Client - Server communication
-    [ ] Object State Updating
+    [X] Fuctioning Player 2
+    [~] Client - Server communication
+    [~] Object State Updating
     [ ] Make sure each works as intended
 
 [ ] Extend to room generation from file(s)
 
+[ ] Beauty
+    [ ] Sprite work upon moving
 
 
 DEBUGGING
 ===========
 [ ] See about fixing stop during new direction?
 
+[ ] Delete players when they leave?
 
 Scratch Pad
 =============

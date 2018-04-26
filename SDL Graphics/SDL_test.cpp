@@ -104,7 +104,7 @@ int main()
 
   //Setup Images
   SDL_Surface* g;
-  g = IMG_Load("G.png");
+  g = IMG_Load("120430.gif");
 
   SDL_Surface* img;
   img = IMG_Load("Cursor.png");

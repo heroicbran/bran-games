@@ -59,9 +59,22 @@ int initialize_SDL(SDL_Window* &window, SDL_Surface* &screenSurface)
   return 1;
 }
 
-void load_images()
+//Load all potential images into surfaces and places them into a map
+void load_images(map<string, SDL_Surface*> &images)
 {
-  //test
+  //Make a loop and used the file names?
+  SDL_Surface* g = new SDL_Surface;
+  g = IMG_Load("images/g.png");
+  images["g"] = g;
+
+  SDL_Surface* img = new SDL_Surface ;
+  img = IMG_Load("images/cursor.png");
+  images["img"] = img;
+
+  SDL_Surface* door = new SDL_Surface;
+  door = IMG_Load("images/door.png");
+  images["door"] = door;
+
 }
 
 /*void draw_player(SDL_Surface* img, SDL_Su)
@@ -82,6 +95,7 @@ int main()
   SDL_Event evt;
   SDL_Window* window;
   SDL_Surface* screenSurface;
+  map<string, SDL_Surface*> images;
 
   //1 grid spot is 50x50 pixels
 
@@ -90,23 +104,14 @@ int main()
   cout << "Enter your name: ";
   cin >> name;
 
-  initialize_SDL(window, screenSurface);
-
   //Setup Images
-  SDL_Surface* g;
-  g = IMG_Load("images/G.png");
-
-  SDL_Surface* img;
-  img = IMG_Load("images/Cursor.png");
-
-  SDL_Surface* door;
-  door = IMG_Load("images/door.png");
-
-  SDL_UpdateWindowSurface(window);
+  initialize_SDL(window, screenSurface);
+  load_images(images);
 
 
   //Set up Player Stuff
   Mob pc = client.call("add_player", name).as<Mob>();    //Retrieves initial player data
+  Mob otherpc;
 
   if (pc.name.length() > 0)
     cout << pc.name << " has been added." << endl;
@@ -141,17 +146,33 @@ int main()
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
-    //Draw Room
+    //Draw Room (loop through items, doors, Not walls though)
     //if (door1.state == "closed")
       //SDL_BlitSurface(door, NULL, screenSurface, &(door1.rect));
 
     //Draw Player
     pc_rect = {pc.x, pc.y, 100, 100};
-    SDL_BlitSurface(g, NULL, screenSurface, &pc_rect);
-    SDL_UpdateWindowSurface(window);
+    SDL_BlitSurface(images[pc.sprite], NULL, screenSurface, &pc_rect);
+    //SDL_UpdateWindowSurface(window);
 
     //Draw Other Players(s)
+    int count = client.call("get_mobsize").as<int>();
+    int i = 1;
+    while(i <= count)
+    {
+      otherpc = client.call("get_mobs", (i-1)).as<Mob>();
+      if (pc.name != otherpc.name)
+      {
+        cout << "draw other" <<endl;
+        pc_rect = {otherpc.x, otherpc.y, 100, 100};
+        SDL_BlitSurface(images[otherpc.sprite], NULL, screenSurface, &pc_rect);
 
+      }
+      i++;
+    }
+    //map<string,Mob> mob_list;
+
+    //for(map<string, Mob>::iterator i = ; )
 
     //Draw HUD-related
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface);

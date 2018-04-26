@@ -26,6 +26,7 @@ map<string, Room>room_list; //Room ID: Name needed for mob control
 Mob add_player(string name)
 {
   Mob* newMob = new Mob(name);
+  //Logic to determine which images to use
 
   if (mob_list.find(name) == mob_list.end())
   {
@@ -52,9 +53,25 @@ void check_rooms()
 void player_update(Mob pc)
 {
   mob_list[pc.name] = pc;
-  cout << mob_list[pc.name].name;// << " updated: " << mob_list[pc.name].x << " " << mob_list[pc.name].y <<endl;
+  //cout << mob_list[pc.name].name;// << " updated: " << mob_list[pc.name].x << " " << mob_list[pc.name].y <<endl;
 }
 
+int get_mobsize()
+{
+  return mob_list.size();
+}
+
+Mob get_mobs(int pos)
+{
+  //Step through map and return Mobs at pos
+  map<string, Mob>::iterator i = mob_list.begin();
+  while(pos-- > 0)
+  {
+    i++;
+  }
+  return i->second;
+
+}
 
 int main()
 {
@@ -73,6 +90,8 @@ int main()
   rpc::server server(port);
   server.bind("add_player", &add_player);
   server.bind("player_update", &player_update);
+  server.bind("get_mobsize", &get_mobsize);
+  server.bind("get_mobs", &get_mobs);
 
   server.async_run(1);
   cout << "The server is now active." <<endl;
