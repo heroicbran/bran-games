@@ -74,9 +74,9 @@ Mob get_mobs(int pos)
 
 }
 
-vector<Wall> get_walls(string id)
+Room get_room(string id)
 {
-  return room_list[id].wall_list;
+  return room_list[id];
 }
 
 int main()
@@ -98,7 +98,7 @@ int main()
   server.bind("player_update", &player_update);
   server.bind("get_mobsize", &get_mobsize);
   server.bind("get_mobs", &get_mobs);
-  server.bind("get_walls", &get_walls);
+  server.bind("get_room", &get_room);
 
   server.async_run(4);
   cout << "The server is now active." <<endl;
@@ -106,7 +106,10 @@ int main()
 
   //Initialize Game State (Rooms)
   Room testRoom = Room();
-  room_list["test_room"] = testRoom;
+  Door d = Door(0, 0, 0, "door", 300, 300);
+  testRoom.door_list.push_back(d);
+
+  room_list["test"] = testRoom;
 
   while(quit == 0)
   {

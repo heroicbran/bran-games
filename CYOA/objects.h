@@ -8,7 +8,7 @@ using namespace std;
 struct Wall
 {
   //string name = "wall";
-  //string icon = "w.png"; : public Wall
+  //string sprite = "w.png"; : public Wall
   int x;
   int y;
 
@@ -31,7 +31,7 @@ struct Door
   int id;
   int state = 0; //0 = closed, 1 = open
   int locked = 0; //0= unlocked
-  string icon = "door.png";
+  string sprite = "door";
   int x;
   int y;
 
@@ -40,12 +40,12 @@ struct Door
     if (state == 0)
     {
       state == 1;
-      //Change icon
+      //Change sprite
     }
     else
     {
       state == 0;
-      //Change icon
+      //Change sprite
     }
     return state;
   }
@@ -53,27 +53,27 @@ struct Door
   int close_door()
   {
     state == 0;
-    //Change icon
+    //Change sprite
     return state;
   }
 
   int open_door()
   {
     state == 1;
-    //Change icon
+    //Change sprite
     return state;
   }
 
   Door()
   {
-    
+
   }
 
-  Door(int i, int s, int l, string ic, int xx, int yy) : id{i}, state{s}, locked{l}, icon{ic}, x{xx}, y{yy}
+  Door(int i, int s, int l, string sp, int xx, int yy) : id{i}, state{s}, locked{l}, sprite{sp}, x{xx}, y{yy}
   {
 
   }
 
-  MSGPACK_DEFINE_ARRAY(id, state, locked, icon, x, y);  //Note: Needed to make RPC function with custom type.
+  MSGPACK_DEFINE_ARRAY(id, state, locked, sprite, x, y);  //Note: Needed to make RPC function with custom type.
 
 };

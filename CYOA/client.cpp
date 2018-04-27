@@ -97,7 +97,10 @@ int main()
   SDL_Surface* screenSurface;
   map<string, SDL_Surface*> images;
   vector<Wall> room_walls;
-
+  Room pc_room;
+  SDL_Rect door;
+  vector<SDL_Rect> doors;
+  //vector<Item> items;
 
   //1 grid spot is 50x50 pixels
 
@@ -132,8 +135,8 @@ int main()
   //door1.rect = {50, 50, 100, 100};
 
   //Room Initialization
-  room_walls = client.call("get_walls", pc.current_room).as<vector<Wall>>(); //Gets the walls (Also happens upon room change)
-
+  pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
+  room_walls = pc_room.wall_list;               //Get walls for room
 
 
   while(!quit)
@@ -152,9 +155,19 @@ int main()
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
-    //Draw Room (loop through items, doors, Not walls though)
-    //doors = client.call("get_doors", pc.current_room); //Gets the walls
-    //items = client.call("get_items", pc.current_room); //Gets the walls
+    //Draw Room (loop through items, doors)
+    pc_room = client.call("get_room", pc.current_room).as<Room>();
+    doors.clear();
+    for (int j = 0; j < pc_room.door_list.size(); j++)
+    {
+        door = {pc_room.door_list[j].x, pc_room.door_list[j].y, 100, 100};
+        doors.push_back(door);
+        SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door);
+    }
+
+
+    //items = pc_room.item_list;
+    //loop to draw items and rects and stuff
 
     //Draw Player
     pc_rect = {pc.x, pc.y, 100, 100};
@@ -169,7 +182,7 @@ int main()
       otherpc = client.call("get_mobs", (i-1)).as<Mob>();
       if (pc.name != otherpc.name)
       {
-        cout << "draw other" <<endl;
+        //cout << "draw other" <<endl;
         pc_rect = {otherpc.x, otherpc.y, 100, 100};
         SDL_BlitSurface(images[otherpc.sprite], NULL, screenSurface, &pc_rect);
 
