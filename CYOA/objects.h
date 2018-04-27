@@ -8,7 +8,7 @@ using namespace std;
 struct Wall
 {
   //string name = "wall";
-  //string sprite = "w.png"; : public Wall
+  string sprite = "door";
   int x;
   int y;
 

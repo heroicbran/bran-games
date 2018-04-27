@@ -96,7 +96,7 @@ int main()
   SDL_Window* window;
   SDL_Surface* screenSurface;
   map<string, SDL_Surface*> images;
-  vector<Wall> room_walls;
+  vector<Wall> room_bounds;
   Room pc_room;
   SDL_Rect door_rect;
   vector<SDL_Rect> door_rects;
@@ -138,7 +138,7 @@ int main()
 
   //Room Initialization
   pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
-  room_walls = pc_room.wall_list;               //Get walls for room
+  room_bounds = pc_room.wall_list;               //Get walls for room
 
 
   while(!quit)
@@ -159,6 +159,20 @@ int main()
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
     //Draw Room (loop through items, doors)
+
+    //Boundaries (temporary)
+    for(int j = 0; j < room_bounds.size(); j++)
+    {
+      SDL_Rect bound_rect;
+      bound_rect = {room_bounds[j].x, room_bounds[j].y, 100, 100};
+      SDL_Surface* bound = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
+      SDL_FillRect(bound, NULL, SDL_MapRGB(bound->format, 0x00, 0x00, 0xFF));
+      SDL_BlitSurface(bound, NULL, screenSurface, &bound_rect);
+    }
+
+    //Walls
+
+    //Doors
     pc_room = client.call("get_room", pc.current_room).as<Room>();
     door_rects.clear();
     for (int j = 0; j < pc_room.door_list.size(); j++)

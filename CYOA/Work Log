@@ -6,8 +6,8 @@ TO DO
     [X] Place in starter area
 
 [ ] Make a test room with a functionality
-    [ ] Fuctioning Wall
-    [ ] Fuctioning Door  (Player 2 + Door affects Player 1 ability to move. Player 2 not stopped by door) (X coords 10 less than usual)
+    [~] Fuctioning Wall (duplicate door code for wall)
+    [~] Fuctioning Door  (Player 2 + Door affects Player 1 ability to move. Player 2 not stopped by door) (first moving direction 10 less than usual)
     [ ] Fuctioning Item
     [X] Fuctioning Player 2
     [~] Client - Server communication

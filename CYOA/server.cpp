@@ -108,7 +108,8 @@ int main()
   Room testRoom = Room();
   Door d = Door(0, 0, 0, "door", 300, 300);
   testRoom.door_list.push_back(d);
-
+  Wall w = Wall(500,500);
+  testRoom.wall_list.push_back(w);
   room_list["test"] = testRoom;
 
   while(quit == 0)
