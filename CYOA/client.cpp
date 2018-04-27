@@ -98,8 +98,8 @@ int main()
   map<string, SDL_Surface*> images;
   vector<Wall> room_walls;
   Room pc_room;
-  SDL_Rect door;
-  vector<SDL_Rect> doors;
+  SDL_Rect door_rect;
+  vector<SDL_Rect> door_rects;
   //vector<Item> items;
 
   //1 grid spot is 50x50 pixels
@@ -127,7 +127,9 @@ int main()
   pc.inventory.push_back("none");
   pc.inventory.push_back("none");
 
-  SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};;
+  //Ancillary
+  SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};
+  SDL_Rect otpc_rect;
   SDL_Rect hud_rect;
 
   //DOOR_TEST
@@ -150,27 +152,27 @@ int main()
 
     //Do special events/cutscenes?
 
-    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client);
+    //User Input
+    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, pc_room.door_list);
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
     //Draw Room (loop through items, doors)
     pc_room = client.call("get_room", pc.current_room).as<Room>();
-    doors.clear();
+    door_rects.clear();
     for (int j = 0; j < pc_room.door_list.size(); j++)
     {
-        door = {pc_room.door_list[j].x, pc_room.door_list[j].y, 100, 100};
-        doors.push_back(door);
-        SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door);
+        door_rect = {pc_room.door_list[j].x, pc_room.door_list[j].y, 100, 100};
+        door_rects.push_back(door_rect);
+        SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door_rect);
     }
-
 
     //items = pc_room.item_list;
     //loop to draw items and rects and stuff
 
     //Draw Player
-    pc_rect = {pc.x, pc.y, 100, 100};
+    //pc_rect = {pc.x, pc.y, 100, 100};
     SDL_BlitSurface(images[pc.sprite], NULL, screenSurface, &pc_rect);
     //SDL_UpdateWindowSurface(window);
 
@@ -183,8 +185,8 @@ int main()
       if (pc.name != otherpc.name)
       {
         //cout << "draw other" <<endl;
-        pc_rect = {otherpc.x, otherpc.y, 100, 100};
-        SDL_BlitSurface(images[otherpc.sprite], NULL, screenSurface, &pc_rect);
+        otpc_rect = {otherpc.x, otherpc.y, 100, 100};
+        SDL_BlitSurface(images[otherpc.sprite], NULL, screenSurface, &otpc_rect);
 
       }
       i++;

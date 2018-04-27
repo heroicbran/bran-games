@@ -1,16 +1,47 @@
 #include "rpc/client.h"
 
-void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client)
+void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<Door> doors)
 {
-    if(evt.type == SDL_KEYDOWN)
+
+  if(evt.type == SDL_KEYDOWN)
   {
     switch(evt.key.keysym.sym)
     {
       case SDLK_DOWN:
         if (menu == 0)
         {
-          pc.y += 10;
-          client.call("player_update", pc);    //Supplies updated player data
+            SDL_Rect collicheck = pc_rect;
+            collicheck.y += 5;
+            int flag = 1;
+            for (int d = 0; d < door_rects.size(); d++)
+            {
+
+              if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
+              {
+                //cout << "branch1 " << endl;
+              }
+              else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
+              {
+                //cout << "branch2 " << endl;
+              }
+              else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
+              {
+                //cout << "branch3 " << endl;
+                flag = 0;
+                //cout << "Open?" << doors[d].open <<endl;
+              }
+              cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+              cout << pc.x << ", " << pc.y << " | ";
+              cout << pc_rect.x << ", " << pc_rect.y << " | ";
+              cout << collicheck.x << ", " << collicheck.y << " | ";
+              cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+            }
+            if (flag == 1)
+            {
+              pc.y += 10;
+              pc_rect.y += 10;
+            }
+            client.call("player_update", pc);    //Supplies updated player data
         }
         else
         {
@@ -60,11 +91,38 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
       case SDLK_RIGHT:
         if (menu == 0)
         {
-          /*if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_FALSE)    //DOOR_TEST
+          SDL_Rect collicheck = pc_rect;
+          collicheck.x += 5;
+          int flag = 1;
+          for (int d = 0; d < door_rects.size(); d++)
+          {
+            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
+            {
+              cout << "branch1 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
+            {
+              cout << "branch2 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
+            {
+              cout << "branch3 " << endl;
+              flag = 0;
+              cout << "Open?" << doors[d].open <<endl;
+            }
+            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+            cout << pc.x << ", " << pc.y << " | ";
+            cout << pc_rect.x << ", " << pc_rect.y << " | ";
+            cout << collicheck.x << ", " << collicheck.y << " | ";
+            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+          }
+          if (flag == 1)
+          {
             pc.x += 10;
-          else if (SDL_HasIntersection(&pc_rect, &(door1.rect)) == SDL_TRUE && door1.state == "open)*/
-            pc.x += 10;
-            client.call("player_update", pc);    //Supplies updated player data
+            pc_rect.x += 10;
+          }
+
+          client.call("player_update", pc);    //Supplies updated player data
         }
         else
         {
@@ -124,7 +182,37 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
       case SDLK_LEFT:
         if (menu == 0)
         {
-          pc.x -= 10;
+          SDL_Rect collicheck = pc_rect;
+          collicheck.x -= 5;
+          int flag = 1;
+          for (int d = 0; d < door_rects.size(); d++)
+          {
+            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
+            {
+              cout << "branch1 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
+            {
+              cout << "branch2 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
+            {
+              cout << "branch3 " << endl;
+              flag = 0;
+              cout << "Open?" << doors[d].open <<endl;
+            }
+            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+            cout << pc.x << ", " << pc.y << " | ";
+            cout << pc_rect.x << ", " << pc_rect.y << " | ";
+            cout << collicheck.x << ", " << collicheck.y << " | ";
+            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+          }
+          if (flag == 1)
+          {
+            pc.x -= 10;
+            pc_rect.x -= 10;
+          }
+
           client.call("player_update", pc);    //Supplies updated player data
         }
 
@@ -185,7 +273,37 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
       case SDLK_UP:
         if (menu == 0)
         {
-          pc.y -= 10;
+          SDL_Rect collicheck = pc_rect;
+          collicheck.y -= 5;
+          int flag = 1;
+          for (int d = 0; d < door_rects.size(); d++)
+          {
+            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
+            {
+              cout << "branch1 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
+            {
+              cout << "branch2 " << endl;
+            }
+            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
+            {
+              cout << "branch3 " << endl;
+              flag = 0;
+              cout << "Open?" << doors[d].open <<endl;
+            }
+            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+            cout << pc.x << ", " << pc.y << " | ";
+            cout << pc_rect.x << ", " << pc_rect.y << " | ";
+            cout << collicheck.x << ", " << collicheck.y << " | ";
+            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+          }
+          if (flag == 1)
+          {
+            pc.y -= 10;
+            pc_rect.y -= 10;
+          }
+
           client.call("player_update", pc);    //Supplies updated player data
         }
         else
@@ -248,11 +366,11 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           //DOOR_TEST
           /*if (abs(pc.y - door1.rect.y) <= 100 && pc.x == door1.rect.x) //If next to door...
           {
-            if(door1.state == "closed")
-              door1.state = "open";
+            if(door1.open == "closed")
+              door1.open = "open";
             else
-              door1.state = "closed";
-            cout << door1.state <<" " <<pc.y << " " << door1.rect.y << abs(pc.y - door1.rect.y)  <<endl;
+              door1.open = "closed";
+            cout << door1.open <<" " <<pc.y << " " << door1.rect.y << abs(pc.y - door1.rect.y)  <<endl;
           }*/
         }
         else

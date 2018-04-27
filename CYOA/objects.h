@@ -29,7 +29,7 @@ struct Wall
 struct Door
 {
   int id;
-  int state = 0; //0 = closed, 1 = open
+  int open = 0; //0 = closed, 1 = open
   int locked = 0; //0= unlocked
   string sprite = "door";
   int x;
@@ -37,31 +37,31 @@ struct Door
 
   int toggle_door()
   {
-    if (state == 0)
+    if (open == 0)
     {
-      state == 1;
+      open == 1;
       //Change sprite
     }
     else
     {
-      state == 0;
+      open == 0;
       //Change sprite
     }
-    return state;
+    return open;
   }
 
   int close_door()
   {
-    state == 0;
+    open == 0;
     //Change sprite
-    return state;
+    return open;
   }
 
   int open_door()
   {
-    state == 1;
+    open == 1;
     //Change sprite
-    return state;
+    return open;
   }
 
   Door()
@@ -69,11 +69,11 @@ struct Door
 
   }
 
-  Door(int i, int s, int l, string sp, int xx, int yy) : id{i}, state{s}, locked{l}, sprite{sp}, x{xx}, y{yy}
+  Door(int i, int o, int l, string sp, int xx, int yy) : id{i}, open{o}, locked{l}, sprite{sp}, x{xx}, y{yy}
   {
 
   }
 
-  MSGPACK_DEFINE_ARRAY(id, state, locked, sprite, x, y);  //Note: Needed to make RPC function with custom type.
+  MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y);  //Note: Needed to make RPC function with custom type.
 
 };
