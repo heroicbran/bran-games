@@ -1,4 +1,4 @@
-#include "objects.h"
+//#include "objects.h"
 #include <map>
 
 
@@ -7,12 +7,14 @@ using namespace std;
 struct Room
 {
   int id;
-  string room_name = "first";
+  string room_name = "test";
   vector<Wall> wall_list;
-  map<int,int> door_list; //Key = id, value = state
+  vector<Door> door_list; //Key = id, value = state
   //vector<Tile>tile_list;
-  map<string,int> item_list; //Key = name, value = quantity available
+  vector<Item> item_list; //Key = name, value = quantity available
+  bool change_lock = false;  //Lock to keep room updates from happening
 
+  MSGPACK_DEFINE_ARRAY(id, room_name, wall_list, door_list, item_list, change_lock);  //Note: Needed to make RPC function with custom type.
 
 
 };

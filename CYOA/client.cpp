@@ -5,16 +5,16 @@
 #include <vector>
 #include "rpc/client.h"
 #include "images.h"
-#include "rooms.h"
-#include "mobs.h"
-#include "input.h"
-//#include "objects.h" (redundant)
-#include "network.h"
-#include "menu.h"
-#include "inventory.h"
-
-
 using namespace std;
+#include "mobs.h"
+#include "inventory.h"
+#include "objects.h"
+#include "rooms.h"
+#include "input.h"
+//#include "network.h"
+#include "menu.h"
+
+
 
 const int s_width = 1280;
 const int s_height = 760;
@@ -96,6 +96,8 @@ int main()
   SDL_Window* window;
   SDL_Surface* screenSurface;
   map<string, SDL_Surface*> images;
+  vector<Wall> room_walls;
+
 
   //1 grid spot is 50x50 pixels
 
@@ -129,6 +131,10 @@ int main()
   //Door door1 = Door();
   //door1.rect = {50, 50, 100, 100};
 
+  //Room Initialization
+  room_walls = client.call("get_walls", pc.current_room).as<vector<Wall>>(); //Gets the walls (Also happens upon room change)
+
+
 
   while(!quit)
   {
@@ -147,8 +153,8 @@ int main()
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
     //Draw Room (loop through items, doors, Not walls though)
-    //if (door1.state == "closed")
-      //SDL_BlitSurface(door, NULL, screenSurface, &(door1.rect));
+    //doors = client.call("get_doors", pc.current_room); //Gets the walls
+    //items = client.call("get_items", pc.current_room); //Gets the walls
 
     //Draw Player
     pc_rect = {pc.x, pc.y, 100, 100};
@@ -170,7 +176,6 @@ int main()
       }
       i++;
     }
-    //map<string,Mob> mob_list;
 
     //for(map<string, Mob>::iterator i = ; )
 

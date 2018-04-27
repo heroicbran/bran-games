@@ -7,7 +7,7 @@ struct Mob
   int frame = 0;
   string sprite = "g";
   vector<string> inventory;
-  string current_room = "first"; //Room being occupied by mob
+  string current_room = "test"; //Room being occupied by mob
   //int is_player = 0; //Used for PC
   int player_id;
   MSGPACK_DEFINE_ARRAY(name, hp, x, y, frame, sprite, inventory, current_room, player_id);  //Note: Needed to make RPC function with custom type.

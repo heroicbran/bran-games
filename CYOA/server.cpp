@@ -11,17 +11,18 @@
 #include <dirent.h>
 #include <chrono>
 
-#include "rooms.h"
-#include "mobs.h"
-//#include "objects.h"
-#include "network.h" //Functions for actions over network
-#include "inventory.h"
-
 using namespace std;
+#include "mobs.h"
+#include "objects.h"
+#include "inventory.h"
+#include "rooms.h"
+//#include "network.h" //Functions for actions over network
+
 
 //Maps for mob list and room list
 map<string, Mob> mob_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
+
 
 Mob add_player(string name)
 {
@@ -73,6 +74,11 @@ Mob get_mobs(int pos)
 
 }
 
+vector<Wall> get_walls(string id)
+{
+  return room_list[id].wall_list;
+}
+
 int main()
 {
   string ip;
@@ -92,8 +98,9 @@ int main()
   server.bind("player_update", &player_update);
   server.bind("get_mobsize", &get_mobsize);
   server.bind("get_mobs", &get_mobs);
+  server.bind("get_walls", &get_walls);
 
-  server.async_run(1);
+  server.async_run(4);
   cout << "The server is now active." <<endl;
 
 
