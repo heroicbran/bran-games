@@ -5,14 +5,14 @@ TO DO
     [X] Generate a mob
     [X] Place in starter area
 
-[ ] Make a test room with a functionality
-    [~] Fuctioning Wall (duplicate door code for wall)
-    [~] Fuctioning Door  (Player 2 + Door affects Player 1 ability to move. Player 2 not stopped by door) (first moving direction 10 less than usual)
+[~] Make a test room with a functionality
+    [X] Fuctioning Wall
+    [~] Fuctioning Door   (Doors open/close) (warp doors)
     [ ] Fuctioning Item
     [X] Fuctioning Player 2
     [~] Client - Server communication
     [~] Object State Updating
-    [ ] Make sure each works as intended
+        [ ] Movement fixes (first moving direction 10 less than usual)
 
 [ ] Extend to room generation from file(s)
 

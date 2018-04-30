@@ -153,7 +153,7 @@ int main()
     //Do special events/cutscenes?
 
     //User Input
-    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, pc_room.door_list);
+    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));

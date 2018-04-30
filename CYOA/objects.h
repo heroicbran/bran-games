@@ -77,3 +77,9 @@ struct Door
   MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y);  //Note: Needed to make RPC function with custom type.
 
 };
+
+//Warp Door, which inherits door but has a warp x and y. annd new msgpack
+
+struct WarpDoor : public Door {
+
+};

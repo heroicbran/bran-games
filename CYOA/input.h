@@ -1,6 +1,6 @@
 #include "rpc/client.h"
 
-void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<Door> doors)
+void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<Door> doors, vector<Wall> walls)
 {
 
   if(evt.type == SDL_KEYDOWN)
@@ -12,7 +12,16 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
             SDL_Rect collicheck = pc_rect;
             collicheck.y += 5;
-            int flag = 1;
+            int canMove = 1;
+
+            //Note: These are bounds + decorative/visible walls
+            for (int w = 0; w < walls.size(); w++)
+            {
+              SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
+              if (SDL_HasIntersection(&collicheck, &wallRect))
+                canMove = 0;
+            }
+
             for (int d = 0; d < door_rects.size(); d++)
             {
 
@@ -27,7 +36,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
               {
                 //cout << "branch3 " << endl;
-                flag = 0;
+                canMove = 0;
                 //cout << "Open?" << doors[d].open <<endl;
               }
               cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
@@ -36,7 +45,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               cout << collicheck.x << ", " << collicheck.y << " | ";
               cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
             }
-            if (flag == 1)
+            if (canMove == 1)
             {
               pc.y += 10;
               pc_rect.y += 10;
@@ -93,7 +102,16 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.x += 5;
-          int flag = 1;
+          int canMove = 1;
+
+          //Note: These are bounds + decorative/visible walls
+          for (int w = 0; w < walls.size(); w++)
+          {
+            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
+            if (SDL_HasIntersection(&collicheck, &wallRect))
+              canMove = 0;
+          }
+
           for (int d = 0; d < door_rects.size(); d++)
           {
             if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
@@ -107,7 +125,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
             {
               cout << "branch3 " << endl;
-              flag = 0;
+              canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
             cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
@@ -116,7 +134,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             cout << collicheck.x << ", " << collicheck.y << " | ";
             cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
           }
-          if (flag == 1)
+          if (canMove == 1)
           {
             pc.x += 10;
             pc_rect.x += 10;
@@ -184,7 +202,16 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.x -= 5;
-          int flag = 1;
+          int canMove = 1;
+
+          //Note: These are bounds + decorative/visible walls
+          for (int w = 0; w < walls.size(); w++)
+          {
+            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
+            if (SDL_HasIntersection(&collicheck, &wallRect))
+              canMove = 0;
+          }
+
           for (int d = 0; d < door_rects.size(); d++)
           {
             if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
@@ -198,7 +225,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
             {
               cout << "branch3 " << endl;
-              flag = 0;
+              canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
             cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
@@ -207,7 +234,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             cout << collicheck.x << ", " << collicheck.y << " | ";
             cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
           }
-          if (flag == 1)
+          if (canMove == 1)
           {
             pc.x -= 10;
             pc_rect.x -= 10;
@@ -275,7 +302,16 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.y -= 5;
-          int flag = 1;
+          int canMove = 1;
+
+          //Note: These are bounds + decorative/visible walls
+          for (int w = 0; w < walls.size(); w++)
+          {
+            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
+            if (SDL_HasIntersection(&collicheck, &wallRect))
+              canMove = 0;
+          }
+
           for (int d = 0; d < door_rects.size(); d++)
           {
             if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
@@ -289,7 +325,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
             {
               cout << "branch3 " << endl;
-              flag = 0;
+              canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
             cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
@@ -298,7 +334,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             cout << collicheck.x << ", " << collicheck.y << " | ";
             cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
           }
-          if (flag == 1)
+          if (canMove == 1)
           {
             pc.y -= 10;
             pc_rect.y -= 10;
@@ -359,7 +395,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         break;
 
       case SDLK_z:
-        //Interact flag toggle
+        //Interact canMove toggle
         if (menu == 0)
         {
           //Interact button?
@@ -393,7 +429,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         break;
 
       case SDLK_x:
-        //Inventory flag toggle
+        //Inventory canMove toggle
         if (menu == 0)
         {
           menu = 1;
