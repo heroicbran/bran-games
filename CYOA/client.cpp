@@ -15,7 +15,6 @@ using namespace std;
 #include "menu.h"
 
 
-
 const int s_width = 1280;
 const int s_height = 760;
 
@@ -59,23 +58,7 @@ int initialize_SDL(SDL_Window* &window, SDL_Surface* &screenSurface)
   return 1;
 }
 
-//Load all potential images into surfaces and places them into a map
-void load_images(map<string, SDL_Surface*> &images)
-{
-  //Make a loop and used the file names?
-  SDL_Surface* g = new SDL_Surface;
-  g = IMG_Load("images/g.png");
-  images["g"] = g;
 
-  SDL_Surface* img = new SDL_Surface ;
-  img = IMG_Load("images/cursor.png");
-  images["img"] = img;
-
-  SDL_Surface* door = new SDL_Surface;
-  door = IMG_Load("images/door.png");
-  images["door"] = door;
-
-}
 
 /*void draw_player(SDL_Surface* img, SDL_Su)
 {
@@ -137,8 +120,8 @@ int main()
   //door1.rect = {50, 50, 100, 100};
 
   //Room Initialization
-  pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
-  room_bounds = pc_room.wall_list;               //Get walls for room
+  //pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
+  //room_bounds = pc_room.wall_list;               //Get walls for room
 
 
   while(!quit)
@@ -159,8 +142,11 @@ int main()
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
     //Draw Room (loop through items, doors)
+    pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
+    room_bounds = pc_room.wall_list;               //Get walls for room
 
     //Boundaries (temporary)
+
     for(int j = 0; j < room_bounds.size(); j++)
     {
       SDL_Rect bound_rect;
@@ -170,7 +156,7 @@ int main()
       SDL_BlitSurface(bound, NULL, screenSurface, &bound_rect);
     }
 
-    //Walls
+    //Walls (Decor)
 
     //Doors
     pc_room = client.call("get_room", pc.current_room).as<Room>();
@@ -182,7 +168,7 @@ int main()
         SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door_rect);
     }
 
-    //items = pc_room.item_list;
+    //items
     //loop to draw items and rects and stuff
 
     //Draw Player
@@ -209,7 +195,7 @@ int main()
     //for(map<string, Mob>::iterator i = ; )
 
     //Draw HUD-related
-    draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface);
+    draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
 
     //Clear everything? / Renderer?
   }

@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <list>
+using namespace std;
 #include "rpc/server.h"
 #include "rpc/client.h"
 #include "rpc/this_session.h"
@@ -11,7 +12,6 @@
 #include <dirent.h>
 #include <chrono>
 
-using namespace std;
 #include "mobs.h"
 #include "objects.h"
 #include "inventory.h"
@@ -79,6 +79,11 @@ Room get_room(string id)
   return room_list[id];
 }
 
+void use_door(int index, string room_name)
+{
+  room_list[room_name].door_list[index].toggle_door();
+}
+
 int main()
 {
   string ip;
@@ -99,6 +104,7 @@ int main()
   server.bind("get_mobsize", &get_mobsize);
   server.bind("get_mobs", &get_mobs);
   server.bind("get_room", &get_room);
+  server.bind("use_door", &use_door);
 
   server.async_run(4);
   cout << "The server is now active." <<endl;

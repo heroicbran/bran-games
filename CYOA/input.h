@@ -398,16 +398,13 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         //Interact canMove toggle
         if (menu == 0)
         {
-          //Interact button?
-          //DOOR_TEST
-          /*if (abs(pc.y - door1.rect.y) <= 100 && pc.x == door1.rect.x) //If next to door...
+          for (int d = 0; d < door_rects.size(); d++)
           {
-            if(door1.open == "closed")
-              door1.open = "open";
-            else
-              door1.open = "closed";
-            cout << door1.open <<" " <<pc.y << " " << door1.rect.y << abs(pc.y - door1.rect.y)  <<endl;
-          }*/
+            if (abs(pc.y - door_rects[d].y) <= 100 && abs(pc.x - door_rects[d].x) <= 100) //Check is player is by door...
+            {
+              client.call("use_door", d, pc.current_room); //TODO: ADD LOCKED OPTION (Maybe with a sound)
+            }
+          }
         }
         else
         {

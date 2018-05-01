@@ -7,7 +7,7 @@ TO DO
 
 [~] Make a test room with a functionality
     [X] Fuctioning Wall
-    [~] Fuctioning Door   (Doors open/close) (warp doors)
+    [X] Fuctioning Door   (Doors open/close) (warp doors)
     [ ] Fuctioning Item
     [X] Fuctioning Player 2
     [~] Client - Server communication

@@ -7,8 +7,7 @@ using namespace std;
 
 struct Wall
 {
-  //string name = "wall";
-  string sprite = "door";
+  string sprite = "";
   int x;
   int y;
 
@@ -35,17 +34,23 @@ struct Door
   int x;
   int y;
 
+  //Warp Door coordinates and new room location.
+  char type = 'n';  //n for normal or w for warp
+  int wx;
+  int wy;
+  string wroom;
+
   int toggle_door()
   {
-    if (open == 0)
+    if (open == 0)      //TODO: Add if check for different door direction sprites
     {
-      open == 1;
-      //Change sprite
+      open = 1;
+      sprite = "o";
     }
-    else
+    else if (open == 1)
     {
-      open == 0;
-      //Change sprite
+      open = 0;
+      sprite = "door";
     }
     return open;
   }
@@ -64,6 +69,14 @@ struct Door
     return open;
   }
 
+  void warp_door(Mob &pc)
+  {
+    pc.x = wx;
+    pc.y = wy;
+    pc.current_room = wroom;
+  }
+
+
   Door()
   {
 
@@ -74,12 +87,6 @@ struct Door
 
   }
 
-  MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y);  //Note: Needed to make RPC function with custom type.
-
-};
-
-//Warp Door, which inherits door but has a warp x and y. annd new msgpack
-
-struct WarpDoor : public Door {
+  MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y, type, wx, wy, wroom);  //Note: Needed to make RPC function with custom type.
 
 };

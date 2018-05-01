@@ -1,4 +1,4 @@
-void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mob pc, SDL_Surface* screenSurface)
+void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mob pc, SDL_Surface* screenSurface, map<string, SDL_Surface*> &images)
 {
   if (menu == 1)
   {
@@ -103,19 +103,26 @@ void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mo
       hud_rect = {350, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
+      if (pc.inventory[0] != "none")
+        SDL_BlitSurface(images[pc.inventory[0]], NULL, screenSurface, &hud_rect);
 
       hud_rect = {550, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
+      if (pc.inventory[1] != "none")
+        SDL_BlitSurface(images[pc.inventory[0]], NULL, screenSurface, &hud_rect);
 
       hud_rect = {750, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
+      if (pc.inventory[2] != "none")
+        SDL_BlitSurface(images[pc.inventory[0]], NULL, screenSurface, &hud_rect);
 
       hud_rect = {950, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
-
+      if (pc.inventory[3] != "none")
+        SDL_BlitSurface(images[pc.inventory[0]], NULL, screenSurface, &hud_rect);
 
     }
     else if (menu_type == "inv2")
