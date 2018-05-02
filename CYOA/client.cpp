@@ -171,7 +171,7 @@ int main()
     item_rects.clear();
     for (int i = 0; i < pc_room.item_list.size(); i++)
     {
-        item_rect = {pc_room.item_list[i].x, pc_room.item_list[i].y, 100, 100};
+        item_rect = {pc_room.item_list[i].x, pc_room.item_list[i].y, 50, 50};
         item_rects.push_back(item_rect);
         SDL_BlitSurface(images["item_twinkle"], NULL, screenSurface, &item_rect);
     }
