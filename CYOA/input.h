@@ -173,7 +173,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             switch(cursor)
             {
               case 0:
-                if (pc.inventory[0] == "none")
+                if (pc.inventory.size() == 0)
                   hud_rect = {0, 0, 0, 0};
                 else
                   cursor = 1;
@@ -274,7 +274,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             switch(cursor)
             {
               case 0:
-                if (pc.inventory[0] == "none")
+                if (pc.inventory.size() == 0)
                   hud_rect = {0, 0, 0, 0};
                 else
                   cursor = 3;
@@ -405,6 +405,15 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               client.call("use_door", d, pc.current_room); //TODO: ADD LOCKED OPTION (Maybe with a sound)
             }
           }
+
+          /*//REFACTOR FOR ITEMS
+          for (int d = 0; d < door_rects.size(); d++)
+          {
+            if (abs(pc.y - door_rects[d].y) <= 100 && abs(pc.x - door_rects[d].x) <= 100) //Check is player is by door...
+            {
+              client.call("obtain_item", d, pc.current_room); //TODO: ADD LOCKED OPTION (Maybe with a sound)
+            }
+          }*/
         }
         else
         {

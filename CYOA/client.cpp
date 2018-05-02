@@ -105,10 +105,7 @@ int main()
     cout << pc.name << " has been added." << endl;
 
   //PC Inventory
-  pc.inventory.push_back("none");
-  pc.inventory.push_back("none");
-  pc.inventory.push_back("none");
-  pc.inventory.push_back("none");
+  //Starts off as empty inventory
 
   //Ancillary
   SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};

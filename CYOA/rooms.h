@@ -1,7 +1,4 @@
 //#include "objects.h"
-#include <map>
-
-
 using namespace std;
 
 struct Room

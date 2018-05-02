@@ -12,9 +12,9 @@ using namespace std;
 #include <dirent.h>
 #include <chrono>
 
+#include "inventory.h"
 #include "mobs.h"
 #include "objects.h"
-#include "inventory.h"
 #include "rooms.h"
 //#include "network.h" //Functions for actions over network
 
@@ -84,6 +84,23 @@ void use_door(int index, string room_name)
   room_list[room_name].door_list[index].toggle_door();
 }
 
+int obtain_item(int item_id, Mob pc) //Change how mob is used?
+{
+  int full = 0;
+  if (pc.inventory.size() < 4)
+  {
+    pc.inventory.push_back(room_list[pc.current_room].item_list[item_id]);
+    room_list[pc.current_room].item_list.erase(room_list[pc.current_room].item_list.begin() + item_id);
+  }
+  else
+    full = 1;
+
+  return full;
+}
+
+void drop_item()
+{}
+
 int main()
 {
   string ip;
@@ -105,6 +122,7 @@ int main()
   server.bind("get_mobs", &get_mobs);
   server.bind("get_room", &get_room);
   server.bind("use_door", &use_door);
+  server.bind("obtain_item", &obtain_item);
 
   server.async_run(4);
   cout << "The server is now active." <<endl;

@@ -11,7 +11,7 @@ using namespace std;
 
 int main()
 {
-  string buffer;
+  /*string buffer;
   ifstream reader;
   reader.open("rooms/test");
   int id;
@@ -32,7 +32,11 @@ int main()
         re
         break;
     }
-  }
+  }*/
+
+  vector<int> int_list;
+
+  cout << int_list.size() <<endl;
 
 
   return 0;
