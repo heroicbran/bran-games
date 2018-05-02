@@ -6,8 +6,8 @@
 #include "rpc/client.h"
 #include "images.h"
 using namespace std;
-#include "mobs.h"
 #include "inventory.h"
+#include "mobs.h"
 #include "objects.h"
 #include "rooms.h"
 #include "input.h"

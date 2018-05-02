@@ -9,7 +9,7 @@ struct Mob
   int y;
   int sprite_frame = 0;
   string sprite = "g";
-  vector<Item> inventory;
+  vector<Item> inventory;   //inventory
   string current_room = "test"; //Room being occupied by mob
   //int is_player = 0; //Used for PC
   int player_id;
