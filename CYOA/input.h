@@ -1,6 +1,6 @@
 #include "rpc/client.h"
 
-void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<Door> doors, vector<Wall> walls)
+void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<SDL_Rect> item_rects, vector<Door> doors, vector<Wall> walls)
 {
 
   if(evt.type == SDL_KEYDOWN)
@@ -39,18 +39,17 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
                 canMove = 0;
                 //cout << "Open?" << doors[d].open <<endl;
               }
-              cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-              cout << pc.x << ", " << pc.y << " | ";
-              cout << pc_rect.x << ", " << pc_rect.y << " | ";
-              cout << collicheck.x << ", " << collicheck.y << " | ";
-              cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
             }
             if (canMove == 1)
             {
               pc.y += 10;
               pc_rect.y += 10;
+              client.call("player_update", pc);    //Supplies updated player data
             }
-            client.call("player_update", pc);    //Supplies updated player data
+            cout << "DOWN "<< "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+            cout << pc.x << ", " << pc.y << " | ";
+            cout << pc_rect.x << ", " << pc_rect.y << " | ";
+            cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
         }
         else
         {
@@ -128,19 +127,20 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
-            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-            cout << pc.x << ", " << pc.y << " | ";
-            cout << pc_rect.x << ", " << pc_rect.y << " | ";
-            cout << collicheck.x << ", " << collicheck.y << " | ";
-            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+
           }
           if (canMove == 1)
           {
             pc.x += 10;
             pc_rect.x += 10;
+            client.call("player_update", pc);    //Supplies updated player data
           }
 
-          client.call("player_update", pc);    //Supplies updated player data
+          cout << "DOWN "<< "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+          cout << pc.x << ", " << pc.y << " | ";
+          cout << pc_rect.x << ", " << pc_rect.y << " | ";
+          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
+
         }
         else
         {
@@ -228,19 +228,20 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
-            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-            cout << pc.x << ", " << pc.y << " | ";
-            cout << pc_rect.x << ", " << pc_rect.y << " | ";
-            cout << collicheck.x << ", " << collicheck.y << " | ";
-            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+
           }
           if (canMove == 1)
           {
             pc.x -= 10;
             pc_rect.x -= 10;
+            client.call("player_update", pc);    //Supplies updated player data
           }
 
-          client.call("player_update", pc);    //Supplies updated player data
+          cout << "DOWN "<< "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+          cout << pc.x << ", " << pc.y << " | ";
+          cout << pc_rect.x << ", " << pc_rect.y << " | ";
+          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
+
         }
 
         else
@@ -328,19 +329,19 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
               canMove = 0;
               cout << "Open?" << doors[d].open <<endl;
             }
-            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-            cout << pc.x << ", " << pc.y << " | ";
-            cout << pc_rect.x << ", " << pc_rect.y << " | ";
-            cout << collicheck.x << ", " << collicheck.y << " | ";
-            cout << door_rects[d].x << ", " << door_rects[d].y <<endl;
+
           }
           if (canMove == 1)
           {
             pc.y -= 10;
             pc_rect.y -= 10;
+            client.call("player_update", pc);    //Supplies updated player data
           }
 
-          client.call("player_update", pc);    //Supplies updated player data
+          cout << "DOWN "<< "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
+          cout << pc.x << ", " << pc.y << " | ";
+          cout << pc_rect.x << ", " << pc_rect.y << " | ";
+          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
         }
         else
         {
@@ -406,14 +407,15 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             }
           }
 
-          /*//REFACTOR FOR ITEMS
-          for (int d = 0; d < door_rects.size(); d++)
+
+          for (int i = 0; i < item_rects.size(); i++)
           {
-            if (abs(pc.y - door_rects[d].y) <= 100 && abs(pc.x - door_rects[d].x) <= 100) //Check is player is by door...
+            if (abs(pc.y - item_rects[i].y) <= 100 && abs(pc.x - item_rects[i].x) <= 100) //Check is player is by door...
             {
-              client.call("obtain_item", d, pc.current_room); //TODO: ADD LOCKED OPTION (Maybe with a sound)
+              client.call("obtain_item", i, pc); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
+              break;
             }
-          }*/
+          }
         }
         else
         {

@@ -5,8 +5,10 @@ struct Item
   string name;
   int item_id;
   string sprite;
+  int x;
+  int y;
 
-  MSGPACK_DEFINE_ARRAY(name, item_id, sprite);  //Note: Needed to make RPC function with custom type.*/
+  MSGPACK_DEFINE_ARRAY(name, item_id, sprite, x, y);  //Note: Needed to make RPC function with custom type.*/
 
 };
 

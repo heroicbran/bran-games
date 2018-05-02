@@ -57,6 +57,11 @@ void player_update(Mob pc)
   cout << mob_list[pc.name].name << " updated: " << mob_list[pc.name].x << " " << mob_list[pc.name].y <<endl;
 }
 
+Mob sync_player(Mob pc)
+{
+  return mob_list[pc.name];
+}
+
 int get_mobsize()
 {
   return mob_list.size();
@@ -89,7 +94,7 @@ int obtain_item(int item_id, Mob pc) //Change how mob is used?
   int full = 0;
   if (pc.inventory.size() < 4)
   {
-    pc.inventory.push_back(room_list[pc.current_room].item_list[item_id]);
+    mob_list[pc.current_room].inventory.push_back(room_list[pc.current_room].item_list[item_id]);
     room_list[pc.current_room].item_list.erase(room_list[pc.current_room].item_list.begin() + item_id);
   }
   else
@@ -118,6 +123,7 @@ int main()
   rpc::server server(port);
   server.bind("add_player", &add_player);
   server.bind("player_update", &player_update);
+  server.bind("sync_player", &sync_player);
   server.bind("get_mobsize", &get_mobsize);
   server.bind("get_mobs", &get_mobs);
   server.bind("get_room", &get_room);

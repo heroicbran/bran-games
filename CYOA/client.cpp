@@ -83,6 +83,8 @@ int main()
   Room pc_room;
   SDL_Rect door_rect;
   vector<SDL_Rect> door_rects;
+  SDL_Rect item_rect;
+  vector<SDL_Rect> item_rects;
   //vector<Item> items;
 
   //1 grid spot is 50x50 pixels
@@ -133,7 +135,7 @@ int main()
     //Do special events/cutscenes?
 
     //User Input
-    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
+    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
@@ -166,10 +168,17 @@ int main()
     }
 
     //items
-    //loop to draw items and rects and stuff
+    item_rects.clear();
+    for (int i = 0; i < pc_room.item_list.size(); i++)
+    {
+        item_rect = {pc_room.item_list[i].x, pc_room.item_list[i].y, 100, 100};
+        item_rects.push_back(item_rect);
+        SDL_BlitSurface(images["item_twinkle"], NULL, screenSurface, &item_rect);
+    }
 
     //Draw Player
-    //pc_rect = {pc.x, pc.y, 100, 100};
+
+    pc = client.call("sync_player", pc).as<Mob>();
     SDL_BlitSurface(images[pc.sprite], NULL, screenSurface, &pc_rect);
     //SDL_UpdateWindowSurface(window);
 
