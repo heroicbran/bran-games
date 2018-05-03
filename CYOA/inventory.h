@@ -4,7 +4,7 @@ struct Item
 {
   string name;
   int item_id;
-  string sprite = "test_item";
+  string sprite;
   int x;
   int y;
 

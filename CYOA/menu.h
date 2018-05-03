@@ -78,10 +78,7 @@ void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mo
       switch(cursor)
       {
         case 0:
-          if (pc.inventory.size() == 0)
-            hud_rect = {0, 0, 0, 0};
-          else
-            hud_rect = {337, 510, 200, 200};
+          hud_rect = {337, 510, 200, 200};
           break;
         case 1:
           hud_rect = {537, 510, 200, 200};
@@ -103,26 +100,28 @@ void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mo
       hud_rect = {350, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
+      cout << pc.inventory.size() <<endl;
+      cout << pc.inventory[0].sprite <<endl;
       if (pc.inventory.size() >= 1)
-        SDL_BlitSurface(images[pc.inventory[0].name], NULL, screenSurface, &hud_rect);
+        SDL_BlitSurface(images[pc.inventory[0].sprite], NULL, screenSurface, &hud_rect);
 
       hud_rect = {550, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
       if (pc.inventory.size() >= 2)
-        SDL_BlitSurface(images[pc.inventory[1].name], NULL, screenSurface, &hud_rect);
+        SDL_BlitSurface(images[pc.inventory[1].sprite], NULL, screenSurface, &hud_rect);
 
       hud_rect = {750, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
       if (pc.inventory.size() >= 3)
-        SDL_BlitSurface(images[pc.inventory[2].name], NULL, screenSurface, &hud_rect);
+        SDL_BlitSurface(images[pc.inventory[2].sprite], NULL, screenSurface, &hud_rect);
 
       hud_rect = {950, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
       if (pc.inventory.size() == 4)
-        SDL_BlitSurface(images[pc.inventory[3].name], NULL, screenSurface, &hud_rect);
+        SDL_BlitSurface(images[pc.inventory[3].sprite], NULL, screenSurface, &hud_rect);
 
     }
     else if (menu_type == "inv2")

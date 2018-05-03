@@ -412,7 +412,11 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           {
             if (abs(pc.y - item_rects[i].y) <= 30 && abs(pc.x - item_rects[i].x) <= 30) //Check is player is by door...
             {
-              client.call("obtain_item", i, pc); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
+              pc = client.call("obtain_item", i, pc).as<Mob>(); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
+              cout << "Inventory (Client)  Size:" <<pc.inventory.size() <<endl;
+              cout << "=========" <<endl;
+                for(i=0; i < pc.inventory.size(); i++)
+                  cout << pc.inventory[i].name <<endl;
               break;
             }
           }
@@ -431,7 +435,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           }
           else if (menu_type == "inv")
           {
-
+            //SHOW INVENTORY ITEM DETAIL
           }
         }
         break;

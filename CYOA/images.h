@@ -18,10 +18,14 @@ void load_images(map<string, SDL_Surface*> &images)
   images["door"] = door;
 
   SDL_Surface* door_open = new SDL_Surface;
-  door = IMG_Load("images/door_open.png");
+  door_open = IMG_Load("images/door_open.png");
   images["door_open"] = door_open;
 
   SDL_Surface* item_twinkle = new SDL_Surface;
-  door = IMG_Load("images/item_twinkle.png");
+  item_twinkle = IMG_Load("images/item_twinkle.png");
   images["item_twinkle"] = item_twinkle;
+
+  SDL_Surface* test_item_portrait = new SDL_Surface;
+  test_item_portrait = IMG_Load("images/cursor.png");
+  images["test_item_portrait"] = test_item_portrait;
 }

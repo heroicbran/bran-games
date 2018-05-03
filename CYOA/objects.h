@@ -45,7 +45,7 @@ struct Door
     if (open == 0)      //TODO: Add if check for different door direction sprites
     {
       open = 1;
-      sprite = "o";
+      sprite = "door_open";
     }
     else if (open == 1)
     {

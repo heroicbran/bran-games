@@ -89,18 +89,58 @@ void use_door(int index, string room_name)
   room_list[room_name].door_list[index].toggle_door();
 }
 
-int obtain_item(int item_id, Mob pc) //Change how mob is used?
+Item search_item(int item_id, Mob pc)
 {
-  int full = 0;
-  if (pc.inventory.size() < 4)
+  Item it;
+  for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
   {
-    mob_list[pc.current_room].inventory.push_back(room_list[pc.current_room].item_list[item_id]);
-    room_list[pc.current_room].item_list.erase(room_list[pc.current_room].item_list.begin() + item_id);
+    if (room_list[pc.current_room].item_list[i].item_id == item_id)
+      return room_list[pc.current_room].item_list[i];
   }
-  else
-    full = 1;
+  return it;
+}
 
-  return full;
+int search_index(int item_id, Mob pc)
+{
+  for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
+  {
+    if (room_list[pc.current_room].item_list[i].item_id == item_id)
+      return i;
+  }
+  return 0;
+}
+
+Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
+{
+  int i;
+  if (mob_list[pc.name].inventory.size() < 4)
+  {
+    cout << "ROOM Inventory (B4)  Size:" <<room_list[pc.current_room].item_list.size() <<endl;
+    cout << "=========" <<endl;
+    for(i=0; i < room_list[pc.current_room].item_list.size(); i++)
+    cout << room_list[pc.current_room].item_list[i].name <<endl;
+
+    if (search_item(item_id, pc).name.length() > 0)
+      mob_list[pc.name].inventory.push_back(search_item(item_id, pc));
+    if (room_list[pc.current_room].item_list.size() > 0)
+      room_list[pc.current_room].item_list.erase(room_list[pc.current_room].item_list.begin() + search_index(item_id, pc));
+    cout << "============" <<endl;
+    cout << room_list[pc.current_room].item_list[item_id].name << " obtained" <<endl;
+    cout << "============" <<endl;
+
+    cout << endl;
+    cout << "Inventory (Server)  Size:" <<mob_list[pc.name].inventory.size() <<endl;
+    cout << "=========" <<endl;
+      for(i=0; i < mob_list[pc.name].inventory.size(); i++)
+        cout << mob_list[pc.name].inventory[i].name <<endl;
+
+    cout << endl;
+    cout << "ROOM Inventory (after)  Size:" <<room_list[pc.current_room].item_list.size() <<endl;
+    cout << "=========" <<endl;
+    for(i=0; i < room_list[pc.current_room].item_list.size(); i++)
+      cout << room_list[pc.current_room].item_list[i].name <<endl;
+  }
+  return mob_list[pc.name];
 }
 
 void drop_item()
@@ -144,8 +184,12 @@ int main()
   testRoom.wall_list.push_back(w);
 
   //Test item
-  Item i = Item("test_item", 0, "test_item", 500, 600);
+  Item i = Item("test_item", 0, "test_item_portrait", 100, 300);
   testRoom.item_list.push_back(i);
+
+  Item j = Item("test_item2", 1, "test_item_portrait", 100, 50);
+  testRoom.item_list.push_back(j);
+
   room_list["test"] = testRoom;
 
   while(quit == 0)
