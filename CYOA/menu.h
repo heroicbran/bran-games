@@ -100,8 +100,6 @@ void draw_menu(int &cursor, int &menu, string &menu_type, SDL_Rect &hud_rect, Mo
       hud_rect = {350, 525, 175, 175};
       SDL_FillRect(screenSurface, &hud_rect, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
       //Actual Menu Image
-      cout << pc.inventory.size() <<endl;
-      cout << pc.inventory[0].sprite <<endl;
       if (pc.inventory.size() >= 1)
         SDL_BlitSurface(images[pc.inventory[0].sprite], NULL, screenSurface, &hud_rect);
 

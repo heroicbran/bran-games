@@ -10,8 +10,15 @@ struct Wall
   string sprite = "";
   int x;
   int y;
+  int w;
+  int h;
 
-  Wall(int a, int b) : x{a}, y{b}
+  Wall(int xx, int yy) : x{xx}, y{yy}
+  {
+
+  }
+
+  Wall(int xx, int yy, int ww, int hh) : x{xx}, y{yy}, w{ww}, h{hh}
   {
 
   }
@@ -21,7 +28,7 @@ struct Wall
 
   }
 
-  MSGPACK_DEFINE_ARRAY(x, y);  //Note: Needed to make RPC function with custom type.
+  MSGPACK_DEFINE_ARRAY(sprite, x, y, w, h);  //Note: Needed to make RPC function with custom type.
 
 };
 
@@ -33,7 +40,8 @@ struct Door
   string sprite = "door";
   int x;
   int y;
-
+  int w;
+  int h;
   //Warp Door coordinates and new room location.
   char type = 'n';  //n for normal or w for warp
   int wx;
@@ -82,11 +90,11 @@ struct Door
 
   }
 
-  Door(int i, int o, int l, string sp, int xx, int yy) : id{i}, open{o}, locked{l}, sprite{sp}, x{xx}, y{yy}
+  Door(int i, int o, int l, string sp, int xx, int yy, int ww, int hh) : id{i}, open{o}, locked{l}, sprite{sp}, x{xx}, y{yy}, w{ww}, h{hh}
   {
 
   }
 
-  MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y, type, wx, wy, wroom);  //Note: Needed to make RPC function with custom type.
+  MSGPACK_DEFINE_ARRAY(id, open, locked, sprite, x, y, w, h, type, wx, wy, wroom);  //Note: Needed to make RPC function with custom type.
 
 };

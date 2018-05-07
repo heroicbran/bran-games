@@ -6,6 +6,7 @@ TO DO
     [X] Place in starter area
 
 [~] Make a test room with a functionality
+    [~] Movememt  (Issue with W and N wall collision)
     [X] Fuctioning Wall
     [X] Fuctioning Door   (warp doors)
     [~] Fuctioning Item   ((Allow using items)
@@ -18,7 +19,9 @@ TO DO
 
 [ ] Beauty
     [ ] Sprite work upon moving
-
+    [ ] Text
+    [ ] Backgrounds
+    [ ] HUDs
 
 DEBUGGING
 ===========

@@ -176,11 +176,11 @@ int main()
 
   //Initialize Game State (Rooms)
   Room testRoom = Room();
-  Door d = Door(0, 0, 0, "door", 300, 300);
+  Door d = Door(0, 0, 0, "door", 300, 300, 100, 100);
   testRoom.door_list.push_back(d);
 
   //Test wall(bound)
-  Wall w = Wall(500,500);
+  Wall w = Wall(-1,0, 1, 100);
   testRoom.wall_list.push_back(w);
 
   //Test item

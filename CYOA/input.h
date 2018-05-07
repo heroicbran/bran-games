@@ -1,5 +1,70 @@
 #include "rpc/client.h"
 
+void move_player(int canMove, rpc::client &client, Mob &pc, SDL_Rect &pc_rect, char dir)
+{
+  if (canMove == 1)
+  {
+    switch(dir)
+    {
+      case 'U':
+        pc.y -= 10;
+        pc_rect.y -= 10;
+        client.call("player_update", pc);    //Supplies updated player data
+        break;
+      case 'D':
+        pc.y += 10;
+        pc_rect.y += 10;
+        client.call("player_update", pc);    //Supplies updated player data
+        break;
+      case 'R':
+        pc.x += 10;
+        pc_rect.x += 10;
+        client.call("player_update", pc);    //Supplies updated player data
+        break;
+      case 'L':
+        pc.x -= 10;
+        pc_rect.x -= 10;
+        client.call("player_update", pc);    //Supplies updated player data
+        break;
+    }
+  }
+}
+
+int check_collision(vector<SDL_Rect> door_rects, vector<Door> doors, vector<Wall> walls, SDL_Rect collicheck)
+{
+  int canMove = 1;
+
+  //Note: These are bounds + decorative/visible walls
+  for (int w = 0; w < walls.size(); w++)
+  {
+    SDL_Rect wallRect = {walls[w].x, walls[w].y, walls[w].w, walls[w].h};
+    if (SDL_HasIntersection(&collicheck, &wallRect))
+      canMove = 0;
+  }
+
+  for (int d = 0; d < door_rects.size(); d++)
+  {
+
+    if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
+    {
+      //cout << "branch1 " << endl;
+    }
+    else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
+    {
+      //cout << "branch2 " << endl;
+    }
+    else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
+    {
+      //cout << "branch3 " << endl;
+      canMove = 0;
+      //cout << "Open?" << doors[d].open <<endl;
+    }
+  }
+
+  return canMove;
+}
+
+
 void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<SDL_Rect> item_rects, vector<Door> doors, vector<Wall> walls)
 {
 
@@ -12,44 +77,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
             SDL_Rect collicheck = pc_rect;
             collicheck.y += 5;
-            int canMove = 1;
-
-            //Note: These are bounds + decorative/visible walls
-            for (int w = 0; w < walls.size(); w++)
-            {
-              SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
-              if (SDL_HasIntersection(&collicheck, &wallRect))
-                canMove = 0;
-            }
-
-            for (int d = 0; d < door_rects.size(); d++)
-            {
-
-              if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
-              {
-                //cout << "branch1 " << endl;
-              }
-              else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
-              {
-                //cout << "branch2 " << endl;
-              }
-              else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
-              {
-                //cout << "branch3 " << endl;
-                canMove = 0;
-                //cout << "Open?" << doors[d].open <<endl;
-              }
-            }
-            if (canMove == 1)
-            {
-              pc.y += 10;
-              pc_rect.y += 10;
-              client.call("player_update", pc);    //Supplies updated player data
-            }
-            cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-            cout << pc.x << ", " << pc.y << " | ";
-            cout << pc_rect.x << ", " << pc_rect.y << " | ";
-            cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
+            move_player(check_collision(door_rects, doors, walls, collicheck), client, pc, pc_rect, 'D');
         }
         else
         {
@@ -101,46 +129,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.x += 5;
-          int canMove = 1;
-
-          //Note: These are bounds + decorative/visible walls
-          for (int w = 0; w < walls.size(); w++)
-          {
-            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
-            if (SDL_HasIntersection(&collicheck, &wallRect))
-              canMove = 0;
-          }
-
-          for (int d = 0; d < door_rects.size(); d++)
-          {
-            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
-            {
-              cout << "branch1 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
-            {
-              cout << "branch2 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
-            {
-              cout << "branch3 " << endl;
-              canMove = 0;
-              cout << "Open?" << doors[d].open <<endl;
-            }
-
-          }
-          if (canMove == 1)
-          {
-            pc.x += 10;
-            pc_rect.x += 10;
-            client.call("player_update", pc);    //Supplies updated player data
-          }
-
-          cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-          cout << pc.x << ", " << pc.y << " | ";
-          cout << pc_rect.x << ", " << pc_rect.y << " | ";
-          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
-
+          move_player(check_collision(door_rects, doors, walls, collicheck), client, pc, pc_rect, 'R');
         }
         else
         {
@@ -173,12 +162,8 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             switch(cursor)
             {
               case 0:
-                if (pc.inventory.size() == 0)
-                  hud_rect = {0, 0, 0, 0};
-                else
-                  cursor = 1;
+                cursor = 1;
                 break;
-
               case 1:
                 cursor = 2;
                 break;
@@ -202,46 +187,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.x -= 5;
-          int canMove = 1;
-
-          //Note: These are bounds + decorative/visible walls
-          for (int w = 0; w < walls.size(); w++)
-          {
-            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
-            if (SDL_HasIntersection(&collicheck, &wallRect))
-              canMove = 0;
-          }
-
-          for (int d = 0; d < door_rects.size(); d++)
-          {
-            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
-            {
-              cout << "branch1 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
-            {
-              cout << "branch2 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
-            {
-              cout << "branch3 " << endl;
-              canMove = 0;
-              cout << "Open?" << doors[d].open <<endl;
-            }
-
-          }
-          if (canMove == 1)
-          {
-            pc.x -= 10;
-            pc_rect.x -= 10;
-            client.call("player_update", pc);    //Supplies updated player data
-          }
-
-          cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-          cout << pc.x << ", " << pc.y << " | ";
-          cout << pc_rect.x << ", " << pc_rect.y << " | ";
-          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
-
+          move_player(check_collision(door_rects, doors, walls, collicheck), client, pc, pc_rect, 'L');
         }
 
         else
@@ -275,10 +221,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             switch(cursor)
             {
               case 0:
-                if (pc.inventory.size() == 0)
-                  hud_rect = {0, 0, 0, 0};
-                else
-                  cursor = 3;
+                cursor = 3;
                 break;
               case 1:
                 cursor = 0;
@@ -303,45 +246,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
         {
           SDL_Rect collicheck = pc_rect;
           collicheck.y -= 5;
-          int canMove = 1;
-
-          //Note: These are bounds + decorative/visible walls
-          for (int w = 0; w < walls.size(); w++)
-          {
-            SDL_Rect wallRect = {walls[w].x, walls[w].y, 100, 100};
-            if (SDL_HasIntersection(&collicheck, &wallRect))
-              canMove = 0;
-          }
-
-          for (int d = 0; d < door_rects.size(); d++)
-          {
-            if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 1) //open door
-            {
-              cout << "branch1 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_FALSE)
-            {
-              cout << "branch2 " << endl;
-            }
-            else if (SDL_HasIntersection(&collicheck, &door_rects[d]) == SDL_TRUE && doors[d].open == 0)
-            {
-              cout << "branch3 " << endl;
-              canMove = 0;
-              cout << "Open?" << doors[d].open <<endl;
-            }
-
-          }
-          if (canMove == 1)
-          {
-            pc.y -= 10;
-            pc_rect.y -= 10;
-            client.call("player_update", pc);    //Supplies updated player data
-          }
-
-          cout << "PC     " << "PC_R " << " Coll     "   << "DOOR" <<endl;
-          cout << pc.x << ", " << pc.y << " | ";
-          cout << pc_rect.x << ", " << pc_rect.y << " | ";
-          cout << collicheck.x << ", " << collicheck.y << " | " <<endl;
+          move_player(check_collision(door_rects, doors, walls, collicheck), client, pc, pc_rect, 'U');
         }
         else
         {

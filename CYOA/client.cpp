@@ -114,9 +114,7 @@ int main()
   SDL_Rect otpc_rect;
   SDL_Rect hud_rect;
 
-  //DOOR_TEST
-  //Door door1 = Door();
-  //door1.rect = {50, 50, 100, 100};
+
 
   //Room Initialization
   //pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
@@ -148,9 +146,12 @@ int main()
 
     for(int j = 0; j < room_bounds.size(); j++)
     {
+
+      //UPDATE WALL TREATMENT TO BE LIKE HOW DOORS WORK.SAVE TO VECTOR AND PASS TO PROCESS INPUT
       SDL_Rect bound_rect;
-      bound_rect = {room_bounds[j].x, room_bounds[j].y, 100, 100};
-      SDL_Surface* bound = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
+      bound_rect = {room_bounds[j].x, room_bounds[j].y, room_bounds[j].w, room_bounds[j].h};
+      bound_rect.h = 500;
+      SDL_Surface* bound = SDL_CreateRGBSurface(0, room_bounds[j].w, room_bounds[j].h, 32, 0, 0, 0, 0);
       SDL_FillRect(bound, NULL, SDL_MapRGB(bound->format, 0x00, 0x00, 0xFF));
       SDL_BlitSurface(bound, NULL, screenSurface, &bound_rect);
     }
@@ -162,7 +163,7 @@ int main()
     door_rects.clear();
     for (int j = 0; j < pc_room.door_list.size(); j++)
     {
-        door_rect = {pc_room.door_list[j].x, pc_room.door_list[j].y, 100, 100};
+        door_rect = {pc_room.door_list[j].x, pc_room.door_list[j].y, pc_room.door_list[j].w, pc_room.door_list[j].h};
         door_rects.push_back(door_rect);
         SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door_rect);
     }
@@ -180,7 +181,6 @@ int main()
 
     pc = client.call("sync_player", pc).as<Mob>();
     SDL_BlitSurface(images[pc.sprite], NULL, screenSurface, &pc_rect);
-    //SDL_UpdateWindowSurface(window);
 
     //Draw Other Players(s)
     int count = client.call("get_mobsize").as<int>();
