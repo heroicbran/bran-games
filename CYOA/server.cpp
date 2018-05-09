@@ -79,9 +79,9 @@ Mob get_mobs(int pos)
 
 }
 
-Room get_room(string id)
+Room get_room(string name)
 {
-  return room_list[id];
+  return room_list[name];
 }
 
 void use_door(int index, string room_name)
@@ -149,7 +149,7 @@ void drop_item()
 void setup_room(string room_name)
 {
   string buffer;
-  char c_buffer[50];
+  char c_buffer[256];
   string entry;
   ifstream file_reader;
   ifstream str_reader;
@@ -159,12 +159,11 @@ void setup_room(string room_name)
 
   Room* new_room = new Room();
 
-  while(file_reader.getline(c_buffer, 50))
+  while(file_reader.getline(c_buffer, 256))
   {
     buffer = c_buffer;
     stringstream stream (buffer);
     getline(stream, entry, ' '); //Get first char
-
     switch(entry[0])
     {
       case '#':
@@ -177,16 +176,28 @@ void setup_room(string room_name)
         new_room->room_name = entry;
         break;
 
+      case 'b':
+        getline(stream, entry, ' ');
+        new_room->background = entry;
+        break;
+
       case 'w':
         Wall* new_wall = new Wall();
         getline(stream, entry, ' ');
+        new_wall->sprite = entry;
+
+        getline(stream, entry, ' ');
         new_wall->x = stoi(entry);
+
         getline(stream, entry, ' ');
         new_wall->y = stoi(entry);
+
         getline(stream, entry, ' ');
         new_wall->w = stoi(entry);
+
         getline(stream, entry, ' ');
         new_wall->h = stoi(entry);
+
         new_room->wall_list.push_back(*new_wall);
         break;
 

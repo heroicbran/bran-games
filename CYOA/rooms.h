@@ -5,7 +5,7 @@ struct Room
 {
   int id;
   string room_name = "test";
-  string background;      //Drawn image for background;
+  string background = "none";      //Drawn image for background;
   vector<Wall> wall_list;
   vector<Door> door_list; //Key = id, value = state
   //vector<Tile>tile_list;

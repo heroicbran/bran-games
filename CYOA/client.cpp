@@ -113,7 +113,7 @@ int main()
   SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};
   SDL_Rect otpc_rect;
   SDL_Rect hud_rect;
-
+  SDL_Rect bg_rect;
 
 
   //Room Initialization
@@ -137,21 +137,16 @@ int main()
 
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-
-    //grid
-    SDL_Rect all_rect = {0, 0, 1280, 760};
-    SDL_BlitSurface(images["grid"], NULL, screenSurface, &all_rect);
-
-    //Draw Room (loop through items, doors)
     pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
-    room_bounds = pc_room.wall_list;               //Get walls for room
+    bg_rect = {0, 0, 1280, 760};
+    SDL_BlitSurface(images[pc_room.background], NULL, screenSurface, &bg_rect);
 
     //Boundaries (temporary)
-
+    room_bounds = pc_room.wall_list;               //Get walls for room
     for(int j = 0; j < room_bounds.size(); j++)
     {
 
-      //UPDATE WALL TREATMENT TO BE LIKE HOW DOORS WORK.SAVE TO VECTOR AND PASS TO PROCESS INPUT
+      //TODO: UPDATE WALL TREATMENT TO BE LIKE HOW DOORS WORK.SAVE TO VECTOR AND PASS TO PROCESS INPUT
       SDL_Rect bound_rect;
       bound_rect = {room_bounds[j].x, room_bounds[j].y, room_bounds[j].w, room_bounds[j].h};
       bound_rect.h = 500;
@@ -161,6 +156,7 @@ int main()
     }
 
     //Walls (Decor)
+    //TODO
 
     //Doors
     pc_room = client.call("get_room", pc.current_room).as<Room>();
