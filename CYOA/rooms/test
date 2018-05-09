@@ -1,7 +1,20 @@
 // Format
 //===========
-n name (Room name)
-w w.x w.y (Wall and its coords)
-d d.x d.y (Door and its coords)
-i i.name (Item and its coords)
-** End
+//# id#
+//n name (Room name)
+//b background_name
+//w w.x w.y w.w w.h (Wall and its coords)
+//d d.x d.y w.w w.h (Door and its coords)
+//i i.name (Item and its coords)
+
+// TEST_ROOM
+//===========
+# 0
+n test
+b test_bg
+w -1 0 1 100
+d 0 0 0 0
+i test_item
+i test_item2
+
+// (END OF FILE)

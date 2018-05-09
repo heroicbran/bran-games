@@ -138,6 +138,10 @@ int main()
     //Draw background
     SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
+    //grid
+    SDL_Rect all_rect = {0, 0, 1280, 760};
+    SDL_BlitSurface(images["grid"], NULL, screenSurface, &all_rect);
+
     //Draw Room (loop through items, doors)
     pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
     room_bounds = pc_room.wall_list;               //Get walls for room

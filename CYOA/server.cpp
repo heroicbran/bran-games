@@ -11,7 +11,7 @@ using namespace std;
 #include "rpc/this_server.h"
 #include <dirent.h>
 #include <chrono>
-
+#include <sstream>
 #include "inventory.h"
 #include "mobs.h"
 #include "objects.h"
@@ -146,6 +146,56 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
 void drop_item()
 {}
 
+void setup_room(string room_name)
+{
+  string buffer;
+  char c_buffer[50];
+  string entry;
+  ifstream file_reader;
+  ifstream str_reader;
+  vector<string> tokens;
+  file_reader.open("rooms/" + room_name);
+  int id;
+
+  Room* new_room = new Room();
+
+  while(file_reader.getline(c_buffer, 50))
+  {
+    buffer = c_buffer;
+    stringstream stream (buffer);
+    getline(stream, entry, ' '); //Get first char
+
+    switch(entry[0])
+    {
+      case '#':
+        getline(stream, entry, ' ');
+        id = stoi(entry);
+        break;
+
+      case 'n':
+        getline(stream, entry, ' ');
+        new_room->room_name = entry;
+        break;
+
+      case 'w':
+        Wall* new_wall = new Wall();
+        getline(stream, entry, ' ');
+        new_wall->x = stoi(entry);
+        getline(stream, entry, ' ');
+        new_wall->y = stoi(entry);
+        getline(stream, entry, ' ');
+        new_wall->w = stoi(entry);
+        getline(stream, entry, ' ');
+        new_wall->h = stoi(entry);
+        new_room->wall_list.push_back(*new_wall);
+        break;
+
+    }
+  }
+  room_list[new_room->room_name] = *new_room;
+
+}
+
 int main()
 {
   string ip;
@@ -175,7 +225,9 @@ int main()
 
 
   //Initialize Game State (Rooms)
-  Room testRoom = Room();
+
+  setup_room("test");
+/*  Room testRoom = Room();
   Door d = Door(0, 0, 0, "door", 300, 300, 100, 100);
   testRoom.door_list.push_back(d);
 
@@ -190,7 +242,7 @@ int main()
   Item j = Item("test_item2", 1, "test_item_portrait", 100, 50);
   testRoom.item_list.push_back(j);
 
-  room_list["test"] = testRoom;
+  room_list["test"] = testRoom;*/
 
   while(quit == 0)
   {

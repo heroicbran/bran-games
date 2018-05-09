@@ -28,4 +28,8 @@ void load_images(map<string, SDL_Surface*> &images)
   SDL_Surface* test_item_portrait = new SDL_Surface;
   test_item_portrait = IMG_Load("images/cursor.png");
   images["test_item_portrait"] = test_item_portrait;
+
+  SDL_Surface* grid = new SDL_Surface;
+  grid = IMG_Load("images/grid.png");
+  images["grid"] = grid;
 }

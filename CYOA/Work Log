@@ -11,9 +11,9 @@ TO DO
     [X] Fuctioning Door   (warp doors)
     [~] Fuctioning Item   ((Allow using items)
     [X] Fuctioning Player 2
-    [~] Client - Server communication
-    [~] Object State Updating
-        [ ] Movement fixes (first moving direction 10 less than usual)
+    [X] Client - Server communication
+    [X] Object State Updating
+        [X] Movement fixes (first moving direction 10 less than usual)
 
 [ ] Extend to room generation from file(s)
 

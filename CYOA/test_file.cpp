@@ -3,7 +3,7 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
+#include <sstream>
 using namespace std;
 
 
@@ -11,32 +11,41 @@ using namespace std;
 
 int main()
 {
-  /*string buffer;
-  ifstream reader;
-  reader.open("rooms/test");
+  string buffer;
+  char c_buffer[50];
+  string entry;
+  ifstream file_reader;
+  ifstream str_reader;
+  vector<string> tokens;
+  file_reader.open("rooms/test");
   int id;
   //Room* new_room = new Room();
-  while(reader >> buffer)
-  {
 
-    switch(buffer[0])
+  while(file_reader.getline(c_buffer, 50))
+  {
+    buffer = c_buffer;
+    stringstream stream (buffer);
+    getline(stream, entry, ' '); //Get first char
+
+    switch(entry[0])
     {
       case '#':
-
+        getline(stream, entry, ' ');
+        id = stoi(entry);
+        cout << id;
         break;
+
       case 'n':
-        //new_room.name =
+        getline(stream, entry, ' ');
+        cout << entry <<endl;
         break;
+
       case 'w':
-        reader >> id;
-        re
+        //reader >> id;
         break;
+
     }
-  }*/
-
-  vector<int> int_list;
-
-  cout << int_list.size() <<endl;
+  }
 
 
   return 0;

@@ -111,15 +111,18 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           }
           else if (menu_type == "inv2")
           {
-            case 0:
-              cursor = 1;
-              break;
-            case 1:
-              cursor = 2;
-              break;
-            case 2:
-              cursor = 0;
-              break;
+            switch(cursor)
+            {
+              case 0:
+                cursor = 1;
+                break;
+              case 1:
+                cursor = 2;
+                break;
+              case 2:
+                cursor = 0;
+                break;
+            }
           }
         }
         break;
@@ -318,10 +321,10 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             if (abs(pc.y - item_rects[i].y) <= 30 && abs(pc.x - item_rects[i].x) <= 30) //Check is player is by door...
             {
               pc = client.call("obtain_item", i, pc).as<Mob>(); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
-              cout << "Inventory (Client)  Size:" <<pc.inventory.size() <<endl;
-              cout << "=========" <<endl;
-                for(i=0; i < pc.inventory.size(); i++)
-                  cout << pc.inventory[i].name <<endl;
+              //cout << "Inventory (Client)  Size:" <<pc.inventory.size() <<endl;
+              //cout << "=========" <<endl;
+                //for(i=0; i < pc.inventory.size(); i++)
+                  //cout << pc.inventory[i].name <<endl;
               break;
             }
           }
@@ -340,7 +343,26 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           }
           else if (menu_type == "inv")
           {
-            //SHOW INVENTORY ITEM DETAIL
+            if(pc.inventory.size() >= (cursor+1))
+            {
+              menu_type = "inv2";
+              cursor = 0;
+            }
+          }
+          else if (menu_type == "inv2")
+          {
+            switch(cursor)
+            {
+              case 0:
+                //USE ITEM
+                break;
+              case 1:
+                //EXAMINE
+                break;
+              case 2:
+                //DROP
+                break;
+            }
           }
         }
         break;
@@ -362,6 +384,11 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           {
             menu_type = "main";
             cursor = 0;
+          }
+          else if (menu_type == "inv2")
+          {
+            menu_type = "inv";
+            cursor = 0;   //TODO: MAKE A PREVIOUS CURSOR TO SAVE OLD SPOT
           }
         }
         break;
