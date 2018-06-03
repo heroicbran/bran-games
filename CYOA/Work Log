@@ -15,7 +15,11 @@ TO DO
     [X] Object State Updating
         [X] Movement fixes (first moving direction 10 less than usual)
 
-[ ] Extend to room generation from file(s)
+[~] Extend to room generation from file(s)
+    [X] Walls
+    [ ] Doors
+    [ ] Background (scenic)
+    [ ] Items
 
 [ ] Beauty
     [ ] Sprite work upon moving
