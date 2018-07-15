@@ -7,6 +7,7 @@ void move_player(int canMove, rpc::client &client, Mob &pc, SDL_Rect &pc_rect, c
     switch(dir)
     {
       case 'U':
+        //if dir is U, inc frame (unless it is 4, then make 0). Else, change dir to U and frame to 0.
         pc.y -= 10;
         pc_rect.y -= 10;
         client.call("player_update", pc);    //Supplies updated player data

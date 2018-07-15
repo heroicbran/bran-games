@@ -110,7 +110,8 @@ int main()
   //Starts off as empty inventory
 
   //Ancillary
-  SDL_Rect pc_rect = {pc.x, pc.y, 100, 100};
+  SDL_Rect pc_rect = {pc.x, pc.y, pc.w, pc.h};
+  SDL_Rect sprite_rect = {0, 0, pc.w, pc.h};
   SDL_Rect otpc_rect;
   SDL_Rect hud_rect;
   SDL_Rect bg_rect;
@@ -178,9 +179,8 @@ int main()
     }
 
     //Draw Player
-
     pc = client.call("sync_player", pc).as<Mob>();
-    SDL_BlitSurface(images[pc.sprite], NULL, screenSurface, &pc_rect);
+    SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
 
     //Draw Other Players(s)
     int count = client.call("get_mobsize").as<int>();
@@ -197,6 +197,9 @@ int main()
       }
       i++;
     }
+
+    //Draw Monster(s)
+    //Draw Ability Effects
 
     //for(map<string, Mob>::iterator i = ; )
 

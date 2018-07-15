@@ -24,9 +24,10 @@ map<string, Mob> mob_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
 
 
+
 Mob add_player(string name)
 {
-  Mob* newMob = new Mob(name);
+  Mob* newMob = new Player(name);
   //Logic to determine which images to use
 
   if (mob_list.find(name) == mob_list.end())
@@ -205,6 +206,11 @@ void setup_room(string room_name)
   }
   room_list[new_room->room_name] = *new_room;
 
+  void create_ability()
+  {
+
+  }
+
 }
 
 int main()
@@ -255,8 +261,13 @@ int main()
 
   room_list["test"] = testRoom;*/
 
+  //THIS CAN HAVE THINGS LIKE ENEMY BEHAVIOR CONTROL WITHIN LOOPS
   while(quit == 0)
   {
+    //Monster_phase, which loops through each monster and does action. Seek target, attack, reply to convo etc.
+
+    //Handle Combat Rects and code
+    
     cin >> quit; //Just blocks.
   }
     //Initialize Mobs Upon Connect

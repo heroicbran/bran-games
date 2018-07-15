@@ -22,16 +22,34 @@ TO DO
     [ ] Items
 
 [ ] Beauty
-    [ ] Sprite work upon moving
+    [~] Sprite work upon moving
+    [ ] Skin colors
+    [ ] Clothing
     [ ] Text
     [ ] Backgrounds
     [ ] HUDs
+
+[ ] Demo
+    [ ] 3 FriendlyMon
+       [ ] Starter
+       [ ] 2 Converted monsters
+    [ ] 2 Normal Monsters
+       [ ] Melee Attack
+       [ ] Ranged projecticle
+       [ ] Conversation
+       [ ] Boss with the above
+    [ ] Tutorial Dungeon
+       [ ] 3 normal rooms
+       [ ] 1 boss room
+       [ ] Save spot
+          [ ] Delete players when they leave?
+
+      Doing: Make 3 test Allied Mons, 3 test enemy mons, 1 attack (has knockback)
 
 DEBUGGING
 ===========
 [ ] See about fixing stop during new direction?
 
-[ ] Delete players when they leave?
 
 Scratch Pad
 =============

@@ -6,6 +6,7 @@
 //w w.x w.y w.w w.h (Wall and its coords)
 //d id open locked sprite d.x d.y w.w w.h warpx warpy (Door and its coords)
 //i i.name (Item and its coords)
+//m monster_spawner possible_mon1 possible_mon2 ...
 
 // TEST_ROOM
 //===========
@@ -20,5 +21,6 @@ w none 500 0 100 100
 d door 0 0 0 0
 i test_item
 i test_item2
+
 
 // (END OF FILE)

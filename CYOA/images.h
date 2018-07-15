@@ -9,6 +9,10 @@ void load_images(map<string, SDL_Surface*> &images)
   g = IMG_Load("images/g.png");
   images["g"] = g;
 
+  SDL_Surface* human_base = new SDL_Surface;
+  human_base = IMG_Load("images/human_base.png");
+  images["human_base"] = human_base;
+
   SDL_Surface* img = new SDL_Surface ;
   img = IMG_Load("images/cursor.png");
   images["img"] = img;
@@ -32,4 +36,8 @@ void load_images(map<string, SDL_Surface*> &images)
   SDL_Surface* grid = new SDL_Surface;
   grid = IMG_Load("images/grid.png");
   images["grid"] = grid;
+
+  SDL_Surface* shadow = new SDL_Surface;
+  grid = IMG_Load("images/shadow.png");
+  images["shadow"] = shadow;
 }
