@@ -1,3 +1,6 @@
+#ifndef ABILITY_H
+#define ABILITY_H
+
 #include <SDL2/SDL.h>
 
 struct Ability
@@ -45,3 +48,5 @@ struct AOEAttack : public Ability
 {
    int area;
 };
+
+#endif

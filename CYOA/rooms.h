@@ -1,4 +1,5 @@
 //#include "objects.h"
+#include "abilities.h"
 using namespace std;
 
 struct Room

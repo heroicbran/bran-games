@@ -16,11 +16,12 @@ using namespace std;
 #include "mobs.h"
 #include "objects.h"
 #include "rooms.h"
+#include "abilities.h"
 //#include "network.h" //Functions for actions over network
 
 
 //Maps for mob list and room list
-map<string, Mob> mob_list;
+map<string, Mob> player_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
 
 
@@ -30,16 +31,16 @@ Mob add_player(string name)
   Mob* newMob = new Player(name);
   //Logic to determine which images to use
 
-  if (mob_list.find(name) == mob_list.end())
+  if (player_list.find(name) == player_list.end())
   {
-    mob_list[name] = *newMob;
-    cout << "New Player: " << mob_list[name].name << endl;
+    player_list[name] = *newMob;
+    cout << "New Player: " << player_list[name].name << endl;
   }
   else
   {
     //Make mob with modified name with num attached?
   }
-  return mob_list[name];
+  return player_list[name];
 }
 
 void check_mobs()
@@ -54,24 +55,24 @@ void check_rooms()
 
 void player_update(Mob pc)
 {
-  mob_list[pc.name] = pc;
-  cout << mob_list[pc.name].name << " updated: " << mob_list[pc.name].x << " " << mob_list[pc.name].y <<endl;
+  player_list[pc.name] = pc;
+  cout << player_list[pc.name].name << " updated: " << player_list[pc.name].x << " " << player_list[pc.name].y <<endl;
 }
 
 Mob sync_player(Mob pc)
 {
-  return mob_list[pc.name];
+  return player_list[pc.name];
 }
 
 int get_mobsize()
 {
-  return mob_list.size();
+  return player_list.size();
 }
 
 Mob get_mobs(int pos)
 {
   //Step through map and return Mobs at pos
-  map<string, Mob>::iterator i = mob_list.begin();
+  map<string, Mob>::iterator i = player_list.begin();
   while(pos-- > 0)
   {
     i++;
@@ -114,7 +115,7 @@ int search_index(int item_id, Mob pc)
 Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
 {
   int i;
-  if (mob_list[pc.name].inventory.size() < 4)
+  if (player_list[pc.name].inventory.size() < 4)
   {
     cout << "ROOM Inventory (B4)  Size:" <<room_list[pc.current_room].item_list.size() <<endl;
     cout << "=========" <<endl;
@@ -122,7 +123,7 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
     cout << room_list[pc.current_room].item_list[i].name <<endl;
 
     if (search_item(item_id, pc).name.length() > 0)
-      mob_list[pc.name].inventory.push_back(search_item(item_id, pc));
+      player_list[pc.name].inventory.push_back(search_item(item_id, pc));
     if (room_list[pc.current_room].item_list.size() > 0)
       room_list[pc.current_room].item_list.erase(room_list[pc.current_room].item_list.begin() + search_index(item_id, pc));
     cout << "============" <<endl;
@@ -130,10 +131,10 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
     cout << "============" <<endl;
 
     cout << endl;
-    cout << "Inventory (Server)  Size:" <<mob_list[pc.name].inventory.size() <<endl;
+    cout << "Inventory (Server)  Size:" <<player_list[pc.name].inventory.size() <<endl;
     cout << "=========" <<endl;
-      for(i=0; i < mob_list[pc.name].inventory.size(); i++)
-        cout << mob_list[pc.name].inventory[i].name <<endl;
+      for(i=0; i < player_list[pc.name].inventory.size(); i++)
+        cout << player_list[pc.name].inventory[i].name <<endl;
 
     cout << endl;
     cout << "ROOM Inventory (after)  Size:" <<room_list[pc.current_room].item_list.size() <<endl;
@@ -141,7 +142,7 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
     for(i=0; i < room_list[pc.current_room].item_list.size(); i++)
       cout << room_list[pc.current_room].item_list[i].name <<endl;
   }
-  return mob_list[pc.name];
+  return player_list[pc.name];
 }
 
 void drop_item()
@@ -205,13 +206,25 @@ void setup_room(string room_name)
     }
   }
   room_list[new_room->room_name] = *new_room;
+}
 
-  void create_ability()
-  {
-
-  }
+void create_ability_player(AllyMon a_mon, string ability_name)
+{
 
 }
+
+void create_ability_monster(Mob mon, string ability_name)
+{
+
+}
+
+void call_player_ability(string player_name, int action_number)
+{
+   //Get player from map
+   //Call player's proper action using action number
+
+}
+
 
 int main()
 {
@@ -267,7 +280,7 @@ int main()
     //Monster_phase, which loops through each monster and does action. Seek target, attack, reply to convo etc.
 
     //Handle Combat Rects and code
-    
+
     cin >> quit; //Just blocks.
   }
     //Initialize Mobs Upon Connect

@@ -97,10 +97,56 @@ struct NPC : public Mob
 
 };
 
-struct AllyMon
+struct OffenseSelect
+{
+   void attack(){}
+   void use_ability(int ability_number){}
+   MSGPACK_DEFINE_ARRAY();
+};
+
+struct Weapon : public OffenseSelect
 {
   //Stats
   string name;
+  string type = "weapon";
+
+  //for weapon upgrades
+  int level = 1;
+  int upgrade_exp = 0; //Increases upgrade level at 100
+  int max_exp = 100;
+  int wep_atk = 5;
+
+  //        Ele Array Key
+  // 8            7     6      5      4      3          2       1       0
+  //Physical    fire   ice   earth   wind   electric   light   death   status
+  int ele_bonus = 0x100ul;
+
+  Weapon()
+  {}
+
+  Weapon(string n) : name(n)
+  {
+
+  }
+
+  string ability = "none";
+
+  void attack()
+  {
+     //Asks the server to create an attack ability with proper stats attached
+  }
+
+  MSGPACK_DEFINE_ARRAY(name, type, level, upgrade_exp, max_exp, wep_atk, ele_bonus);
+
+
+};
+
+struct AllyMon : public OffenseSelect
+{
+  //Stats
+  string name;
+  string type = "ally_mon";
+
   int level = 1;
   int bond_level = 1;
   int bond_exp = 0; //Increases bond level at 100
@@ -117,9 +163,15 @@ struct AllyMon
   int ele_block = 0x0ul;
 
   AllyMon()
-  {
+  {}
 
-  };
+  AllyMon(string n) : name(n)
+  {
+    return;
+  }
+  //Different constructor that reads ability list from somewhere. File?
+
+  vector<string> abilities = {"none", "none", "none", "none"};
 
   void use_ability(int ability_number)
   {
@@ -127,7 +179,7 @@ struct AllyMon
   }
 
 
-  MSGPACK_DEFINE_ARRAY(name, level, bond_level, bond_exp, mp, matk, mdef);
+  MSGPACK_DEFINE_ARRAY(name, type, level, bond_level, bond_exp, mp, matk, mdef);
 
 };
 
@@ -143,29 +195,31 @@ struct Player : public Mob
   string accessory1;
   string accessory2;
 
-  //List of 3 main monsters
-  enum mon_select
-  {
-    none = 0,
-    one,
-    two,
-    three
-  };
 
-  int curr_mon = none;
 
-  vector<AllyMon> ally_mon_list;
+  int curr_mon = 0;
+
+  //List of weapon + 3 main monsters
+
+  vector<OffenseSelect> offense_select_list; //Includes weapon (0) and ally monsters (1-3)
   vector<AllyMon> full_mon_list;
 
   //List of 10 reserve monsters (will increase limit as we go?)
 
 
   MSGPACK_DEFINE_ARRAY(name, hp_points, atk_points, def_points, char_points, level, levelup_points, experience, max_hp, hp, atk, def,
-    ele_weak, ele_strong, ele_block, x, y, w, h, dir, sprite_frame, sprite, inventory, current_room, player_id, weapon, armor, accessory1, accessory2, curr_mon, ally_mon_list, full_mon_list);  //Note: Needed to make RPC function with custom type.
+    ele_weak, ele_strong, ele_block, x, y, w, h, dir, sprite_frame, sprite, inventory, current_room, player_id, weapon, armor, accessory1, accessory2, curr_mon, offense_select_list, full_mon_list);  //Note: Needed to make RPC function with custom type.
 
 
    Player(string name) : Mob(name)
    {
+     //make 1 weapon, 3 ally_mon as place holders (for tests)
+    //  Weapon* new_weapon = new Weapon("none");
+    //  offense_select_list.push_back(*new_weapon);
+    //  AllyMon* new_a_mon = new AllyMon("none");
+    //  offense_select_list.push_back(*new_a_mon);
+    //  offense_select_list.push_back(*new_a_mon);
+    //  offense_select_list.push_back(*new_a_mon);
      return;
    }
 
@@ -177,11 +231,6 @@ struct Player : public Mob
 
    //H key
    void change_action_set()
-   {
-
-   }
-
-   void attack()
    {
 
    }
@@ -204,24 +253,30 @@ struct Player : public Mob
    }
 
    //K key = 1, J key = 2, L key = 3, I key = 4
-   void call_action(int action_number)
+   void call_action(string player_name, int action_number)
    {
       if(curr_mon == 0)
       {
         switch(action_number)
         {
           case 1:
-            attack();
+            if (offense_select_list.size() > 0)
+            {
+              offense_select_list[0].attack();
+            }
             break;
           case 2:
           case 3:
           case 4:
+          default:
+            break;
         }
       }
-      else
+      else if (curr_mon > 0 && offense_select_list.size() > 1)
       {
-        ally_mon_list[curr_mon].use_ability(action_number);
+          offense_select_list[curr_mon].use_ability(action_number);
       }
+
    }
 
 
@@ -268,7 +323,7 @@ struct Monster : public Mob
   //        Ele Array Key
   // 8            7     6      5      4      3          2       1       0
   //Physical    fire   ice   earth   wind   electric   light   death   status
-  int ele_weak = 0xFul;
+  int ele_weak = 0xFFul;
   int ele_strong = 0x0ul;
   int ele_block = 0x0ul;
 
@@ -294,7 +349,7 @@ struct Monster : public Mob
 
   }
 
-  void do_monster_actions()
+  void handle_monster_actions() //add number to decide behavior type?)
   {
 
   }
