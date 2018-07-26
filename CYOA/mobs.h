@@ -133,7 +133,7 @@ struct Weapon : public OffenseSelect
 
   void attack()
   {
-     //Asks the server to create an attack ability with proper stats attached
+     //Asks the server to create an attack ability with proper stats attached and proper dir of user
   }
 
   MSGPACK_DEFINE_ARRAY(name, type, level, upgrade_exp, max_exp, wep_atk, ele_bonus);

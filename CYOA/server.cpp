@@ -208,7 +208,7 @@ void setup_room(string room_name)
   room_list[new_room->room_name] = *new_room;
 }
 
-void create_ability_player(AllyMon a_mon, string ability_name)
+void create_ability_player(AllyMon a_mon, string ability_name, string dir)
 {
 
 }

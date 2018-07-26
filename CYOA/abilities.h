@@ -21,6 +21,11 @@ struct Ability
 
   }
 
+  void ability_update()
+  {
+
+  }
+
 };
 
 struct MeleeAttack : public Ability
