@@ -1,0 +1,36 @@
+=================
+ABILITY LIST
+=================
+
+//Human Abilities
+--------------------------------
+Attack (Short Weapon)
+~~~~~~
+Type: Physical
+Damage: Based on damage + weapon
+Description: A small arcing slash in space in front of user
+
+Attack (Long weapon)
+~~~~~~
+Type: Physical
+Damage: Based on damage + weapon
+Description: A large arcing slash in the 3 spaces in front of user
+
+Inspect
+~~~~~~
+Type: N/A
+Damage: N/A
+Description: Inspect object in background more closely
+
+Talk
+~~~~~~
+Type: N/A
+Damage: N/A
+Description: When monster is able to be spoken to,
+
+Use Item
+~~~~~~
+Type: Varies
+Damage: Varies, based on a set value
+Description: Opens up a menu to select from 4 item options, W, A, S, D.
+--------------------------------

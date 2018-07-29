@@ -28,7 +28,7 @@ struct Mob
     cha_bonus = 2
   };
   //Character Info
-  string name;
+  string name = "null";
 
   //Stat Points
   int hp_points = min_points;
@@ -133,7 +133,7 @@ struct Weapon : public OffenseSelect
 
   void attack()
   {
-     //Asks the server to create an attack ability with proper stats attached and proper dir of user
+     //Asks the server to create an attack ability with proper stats attached and proper dir of user (RPC call?)
   }
 
   MSGPACK_DEFINE_ARRAY(name, type, level, upgrade_exp, max_exp, wep_atk, ele_bonus);
@@ -232,21 +232,23 @@ struct Player : public Mob
    //H key
    void change_action_set()
    {
-
+     //Change curr_mon
+     //Call to update player mob
    }
 
+   //J
    void inspect()
    {
 
    }
 
-
+   // I
    void use_item()
    {
 
    }
 
-
+   // L
    void talk()
    {
 

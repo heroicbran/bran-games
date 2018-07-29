@@ -208,20 +208,37 @@ void setup_room(string room_name)
   room_list[new_room->room_name] = *new_room;
 }
 
-void create_ability_player(AllyMon a_mon, string ability_name, string dir)
+void create_ability(Mob user, Ability::AbilityID ability_id)  //Don't need 2 types of creates
 {
+   if (ability_id >= 100)
+   {
+     //dir check and add to x or y by 50
+     MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y + 50, 50, 50, "item_twinkle", user, 0, 0);
+     room_list[user.current_room].ability_list.push_back(*melee_attack);
+   }
 
 }
 
-void create_ability_monster(Mob mon, string ability_name)
-{
-
-}
 
 void call_player_ability(string player_name, int action_number)
 {
    //Get player from map
    //Call player's proper action using action number
+
+}
+
+void update_abilities()
+{
+  
+   //Do collision check.
+   //If match, injure target, knock back, I-frames
+   //Else,call member function update
+
+   //Delete from room list if frames = 0
+}
+
+void update_monsters()
+{
 
 }
 
@@ -277,9 +294,9 @@ int main()
   //THIS CAN HAVE THINGS LIKE ENEMY BEHAVIOR CONTROL WITHIN LOOPS
   while(quit == 0)
   {
+    //Handle ability/Combat Rects and code
     //Monster_phase, which loops through each monster and does action. Seek target, attack, reply to convo etc.
 
-    //Handle Combat Rects and code
 
     cin >> quit; //Just blocks.
   }
