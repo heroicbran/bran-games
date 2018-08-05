@@ -199,9 +199,14 @@ int main()
     }
 
     //Draw Monster(s)
-    //Draw Ability Effects
 
-    //for(map<string, Mob>::iterator i = ; )
+    //Draw Ability Effects
+    for (int i = 0; i < pc_room.ability_list.size(); i++)
+    {
+      Ability ability = pc_room.ability_list[i];
+      SDL_Rect ability_rect = ability.hit_box;
+      SDL_BlitSurface(images[ability.sprite], NULL, screenSurface, &ability_rect);
+    }
 
     //Draw HUD-related
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
