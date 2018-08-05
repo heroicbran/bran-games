@@ -1,6 +1,6 @@
 #include "rpc/client.h"
 
-void move_player(int canMove, rpc::client &client, Mob &pc, SDL_Rect &pc_rect, char dir)
+void move_player(int canMove, rpc::client &client, Player &pc, SDL_Rect &pc_rect, char dir)
 {
   if (canMove == 1)
   {
@@ -66,7 +66,7 @@ int check_collision(vector<SDL_Rect> door_rects, vector<Door> doors, vector<Wall
 }
 
 
-void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<SDL_Rect> item_rects, vector<Door> doors, vector<Wall> walls)
+void process_input(int &cursor, SDL_Event evt, Player &pc, int &menu, string &menu_type, SDL_Rect &pc_rect, SDL_Rect &hud_rect, int &quit, rpc::client &client, vector<SDL_Rect> door_rects, vector<SDL_Rect> item_rects, vector<Door> doors, vector<Wall> walls)
 {
 
   if(evt.type == SDL_KEYDOWN)
@@ -321,7 +321,7 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
           {
             if (abs(pc.y - item_rects[i].y) <= 30 && abs(pc.x - item_rects[i].x) <= 30) //Check is player is by door...
             {
-              pc = client.call("obtain_item", i, pc).as<Mob>(); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
+              pc = client.call("obtain_item", i, pc).as<Player>(); //TODO: (IF INV IS FULL. check return var) (Maybe with a sound)
               //cout << "Inventory (Client)  Size:" <<pc.inventory.size() <<endl;
               //cout << "=========" <<endl;
                 //for(i=0; i < pc.inventory.size(); i++)
@@ -392,6 +392,12 @@ void process_input(int &cursor, SDL_Event evt, Mob &pc, int &menu, string &menu_
             cursor = 0;   //TODO: MAKE A PREVIOUS CURSOR TO SAVE OLD SPOT
           }
         }
+        break;
+
+      //Attack key, regardless of equipped ability.
+      case SDLK_k:
+        //Check to see if anything is actually equipped. and check which curr_mon
+        pc.offense_select_list[pc.curr_mon].attack();
         break;
     }
   }

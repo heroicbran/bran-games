@@ -30,6 +30,7 @@ struct Mob
   //Character Info
   string name = "null";
 
+
   //Stat Points
   int hp_points = min_points;
   int atk_points = min_points;
@@ -129,11 +130,12 @@ struct Weapon : public OffenseSelect
 
   }
 
-  string ability = "none";
+  string weapon_ability = "none";
 
-  void attack()
+  void attack(rpc::client &client, Mob &pc)
   {
      //Asks the server to create an attack ability with proper stats attached and proper dir of user (RPC call?)
+     client.call("create_ability", pc, 100);
   }
 
   MSGPACK_DEFINE_ARRAY(name, type, level, upgrade_exp, max_exp, wep_atk, ele_bonus);
@@ -171,10 +173,27 @@ struct AllyMon : public OffenseSelect
   }
   //Different constructor that reads ability list from somewhere. File?
 
-  vector<string> abilities = {"none", "none", "none", "none"};
+  //Has an array of ability ids
+  vector<int> abilities = {102, 0, 0, 0};
 
-  void use_ability(int ability_number)
+  void attack(rpc::client &client, Mob &pc)
   {
+    use_ability(1, client, pc);
+  }
+
+  void use_ability(int ability_number, rpc::client &client, Mob &pc)
+  {
+    switch(ability_number)
+    {
+      case 1:
+        cout << "BASH" <<endl;
+        client.call("create_ability", pc, abilities[0]);
+        break;
+
+      case 2:
+        break;
+    }
+   //1 is always attack
 
   }
 
@@ -211,6 +230,9 @@ struct Player : public Mob
     ele_weak, ele_strong, ele_block, x, y, w, h, dir, sprite_frame, sprite, inventory, current_room, player_id, weapon, armor, accessory1, accessory2, curr_mon, offense_select_list, full_mon_list);  //Note: Needed to make RPC function with custom type.
 
 
+   Player()
+   {}
+     
    Player(string name) : Mob(name)
    {
      //make 1 weapon, 3 ally_mon as place holders (for tests)
@@ -232,8 +254,12 @@ struct Player : public Mob
    //H key
    void change_action_set()
    {
-     //Change curr_mon
+     //Change curr_mon (check # of monsters)
      //Call to update player mob
+     if (curr_mon < 3)
+        curr_mon++;
+     else
+        curr_mon = 0;
    }
 
    //J
@@ -268,8 +294,11 @@ struct Player : public Mob
             }
             break;
           case 2:
+            //inspect
           case 3:
+            //talk
           case 4:
+            //inventory
           default:
             break;
         }

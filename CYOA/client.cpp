@@ -100,8 +100,8 @@ int main()
 
 
   //Set up Player Stuff
-  Mob pc = client.call("add_player", name).as<Mob>();    //Retrieves initial player data
-  Mob otherpc;
+  Player pc = client.call("add_player", name).as<Player>();    //Retrieves initial player data
+  Player otherpc;
 
   if (pc.name.length() > 0)
     cout << pc.name << " has been added." << endl;
@@ -179,7 +179,7 @@ int main()
     }
 
     //Draw Player
-    pc = client.call("sync_player", pc).as<Mob>();
+    pc = client.call("sync_player", pc).as<Player>();
     SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
 
     //Draw Other Players(s)
@@ -187,7 +187,7 @@ int main()
     int i = 1;
     while(i <= count)
     {
-      otherpc = client.call("get_mobs", (i-1)).as<Mob>();
+      otherpc = client.call("get_players", (i-1)).as<Player>();
       if (pc.name != otherpc.name)
       {
         //cout << "draw other" <<endl;

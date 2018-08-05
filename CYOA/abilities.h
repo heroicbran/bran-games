@@ -8,24 +8,29 @@ struct Ability
 
   enum AbilityID
   {
+    none = 000,
+
     //0xx will be human abilities
+    interact = 001,
+    talk = 002,
+    use_item = 003,
+
     //1xx will be standard, melee types
+    weapon_attack_short = 100,
+    weapon_attack_long = 101,
+    weapon_attack_ranged = 102,
+    bash = 103
+
     //2xx with be projectile a
     //3xx will be projectile b
     //4xx will be aoe a
     //5xx will be aoe b
-
-    attack_short = 0,
-    attack_long = 1,
-    interact = 2,
-    talk = 3,
-    use_item = 4
   };
 
   SDL_Rect hit_box = {0, 0, 50, 50};
   int distance = 5; //Range is number steps the projectile will take before it fizzles
   int aoe_area = 0;
-  int remaining_frames = 4;
+  int remaining_iterations = 4;
   string sprite = "item_twinkle";
   Mob user;
   OffenseSelect user_os;
@@ -46,7 +51,7 @@ struct Ability
     for (it = mobs.begin(); it != mobs.end(); it++)
     {
       SDL_Rect collide_rect = {it->second.x, it->second.y, it->second.w, it->second.h};
-      if (SDL_HasIntersection(&hit_box, &collide_rect) && it->second.mob_type != npc && it->second.mob_type != user.mob_type)
+      if (SDL_HasIntersection(&hit_box, &collide_rect) && it->second.mob_type != Mob::npc && it->second.mob_type != user.mob_type)
          return it->second;
     }
     return *null_mob;
@@ -61,8 +66,8 @@ struct Ability
 
   void ability_update()
   {
-    if (remaining_frames > 0)
-      remaining_frames--;
+    if (remaining_iterations > 0)
+      remaining_iterations--;
     /*
     UPDATE TO SLASH LOCATION IF MOVING
     switch(user.dir)
@@ -74,7 +79,6 @@ struct Ability
     */
 
   }
-
 };
 
 struct MeleeAttack : public Ability //Base for all melee attacks

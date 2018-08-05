@@ -21,14 +21,14 @@ using namespace std;
 
 
 //Maps for mob list and room list
-map<string, Mob> player_list;
+map<string, Player> player_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
 
 
 
-Mob add_player(string name)
+Player add_player(string name)
 {
-  Mob* newMob = new Player(name);
+  Player* newMob = new Player(name);
   //Logic to determine which images to use
 
   if (player_list.find(name) == player_list.end())
@@ -53,13 +53,13 @@ void check_rooms()
 
 }
 
-void player_update(Mob pc)
+void player_update(Player pc)
 {
   player_list[pc.name] = pc;
   cout << player_list[pc.name].name << " updated: " << player_list[pc.name].x << " " << player_list[pc.name].y <<endl;
 }
 
-Mob sync_player(Mob pc)
+Mob sync_player(Player pc)
 {
   return player_list[pc.name];
 }
@@ -69,10 +69,10 @@ int get_mobsize()
   return player_list.size();
 }
 
-Mob get_mobs(int pos)
+Mob get_players(int pos)
 {
   //Step through map and return Mobs at pos
-  map<string, Mob>::iterator i = player_list.begin();
+  map<string, Player>::iterator i = player_list.begin();
   while(pos-- > 0)
   {
     i++;
@@ -91,7 +91,7 @@ void use_door(int index, string room_name)
   room_list[room_name].door_list[index].toggle_door();
 }
 
-Item search_item(int item_id, Mob pc)
+Item search_item(int item_id, Player pc)
 {
   Item it;
   for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
@@ -102,7 +102,7 @@ Item search_item(int item_id, Mob pc)
   return it;
 }
 
-int search_index(int item_id, Mob pc)
+int search_index(int item_id, Player pc)
 {
   for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
   {
@@ -112,7 +112,7 @@ int search_index(int item_id, Mob pc)
   return 0;
 }
 
-Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
+Mob obtain_item(int item_id, Player pc) //Change how mob is used?
 {
   int i;
   if (player_list[pc.name].inventory.size() < 4)
@@ -208,28 +208,27 @@ void setup_room(string room_name)
   room_list[new_room->room_name] = *new_room;
 }
 
-void create_ability(Mob user, Ability::AbilityID ability_id)  //Don't need 2 types of creates
+void create_ability(Mob user, int ability_id)  //Don't need 2 types of creates
 {
    if (ability_id >= 100)
    {
+     //Make a switch for all types?
+     switch(ability_id)
+     {
+       case 100:
+          MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y + 50, 50, 50, "item_twinkle", user, 0, 0);
+          room_list[user.current_room].ability_list.push_back(*melee_attack);
+          break;
+     }
      //dir check and add to x or y by 50
-     MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y + 50, 50, 50, "item_twinkle", user, 0, 0);
-     room_list[user.current_room].ability_list.push_back(*melee_attack);
+     //use id to create appropriate ability
    }
-
-}
-
-
-void call_player_ability(string player_name, int action_number)
-{
-   //Get player from map
-   //Call player's proper action using action number
 
 }
 
 void update_abilities()
 {
-  
+
    //Do collision check.
    //If match, injure target, knock back, I-frames
    //Else,call member function update
@@ -262,11 +261,11 @@ int main()
   server.bind("player_update", &player_update);
   server.bind("sync_player", &sync_player);
   server.bind("get_mobsize", &get_mobsize);
-  server.bind("get_mobs", &get_mobs);
+  server.bind("get_players", &get_players);
   server.bind("get_room", &get_room);
   server.bind("use_door", &use_door);
   server.bind("obtain_item", &obtain_item);
-
+  server.bind("create_ability", &create_ability);
   server.async_run(4);
   cout << "The server is now active." <<endl;
 
