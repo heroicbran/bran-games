@@ -101,6 +101,7 @@ struct NPC : public Mob
 struct OffenseSelect
 {
    void attack(){}
+   void attack(rpc::client &client, Mob &pc){}
    void use_ability(int ability_number){}
    MSGPACK_DEFINE_ARRAY();
 };
@@ -135,6 +136,7 @@ struct Weapon : public OffenseSelect
   void attack(rpc::client &client, Mob &pc)
   {
      //Asks the server to create an attack ability with proper stats attached and proper dir of user (RPC call?)
+     cout << "K call" <<endl;
      client.call("create_ability", pc, 100);
   }
 
@@ -231,13 +233,19 @@ struct Player : public Mob
 
 
    Player()
-   {}
-     
+   {
+    //  Weapon* new_weapon = new Weapon("Pocket Knife");
+    //  offense_select_list.push_back(*new_weapon);
+    //  cout << "con1" <<endl;
+   }
+
    Player(string name) : Mob(name)
    {
      //make 1 weapon, 3 ally_mon as place holders (for tests)
-    //  Weapon* new_weapon = new Weapon("none");
-    //  offense_select_list.push_back(*new_weapon);
+      // Weapon* new_weapon = new Weapon("Pocket Knife");
+      // offense_select_list.push_back(*new_weapon);
+      // cout << "con2" <<endl;
+
     //  AllyMon* new_a_mon = new AllyMon("none");
     //  offense_select_list.push_back(*new_a_mon);
     //  offense_select_list.push_back(*new_a_mon);
@@ -281,16 +289,20 @@ struct Player : public Mob
    }
 
    //K key = 1, J key = 2, L key = 3, I key = 4
-   void call_action(string player_name, int action_number)
+   void call_action(int action_number, rpc::client &client, Player &pc)
    {
+      cout << "1" <<endl;
       if(curr_mon == 0)
       {
         switch(action_number)
         {
           case 1:
-            if (offense_select_list.size() > 0)
+            cout << "2" <<endl;
+            cout << "OS size: " << pc.offense_select_list.size() <<endl;
+            if (offense_select_list.size() >= 1)
             {
-              offense_select_list[0].attack();
+              cout << "3" <<endl;
+              offense_select_list[0].attack(client, pc);
             }
             break;
           case 2:
@@ -303,10 +315,10 @@ struct Player : public Mob
             break;
         }
       }
-      else if (curr_mon > 0 && offense_select_list.size() > 1)
+      /*else if (curr_mon > 0 && offense_select_list.size() > 1)
       {
           offense_select_list[curr_mon].use_ability(action_number);
-      }
+      }*/
 
    }
 

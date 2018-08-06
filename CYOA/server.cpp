@@ -28,8 +28,11 @@ map<string, Room>room_list; //Room ID: Name needed for mob control
 
 Player add_player(string name)
 {
-  Player* newMob = new Player(name);
-  //Logic to determine which images to use
+   Player* newMob = new Player(name);
+   Weapon* new_weapon = new Weapon("Pocket Knife");
+   (*newMob).offense_select_list.push_back(*new_weapon);
+   cout << (*newMob).offense_select_list.size() <<endl;
+   //Logic to determine which images to use
 
   if (player_list.find(name) == player_list.end())
   {
@@ -59,7 +62,7 @@ void player_update(Player pc)
   cout << player_list[pc.name].name << " updated: " << player_list[pc.name].x << " " << player_list[pc.name].y <<endl;
 }
 
-Mob sync_player(Player pc)
+Player sync_player(Player pc)
 {
   return player_list[pc.name];
 }
@@ -295,7 +298,6 @@ int main()
   {
     //Handle ability/Combat Rects and code
     //Monster_phase, which loops through each monster and does action. Seek target, attack, reply to convo etc.
-
 
     cin >> quit; //Just blocks.
   }

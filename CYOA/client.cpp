@@ -134,6 +134,7 @@ int main()
     //Do special events/cutscenes?
 
     //User Input
+    pc = client.call("sync_player", pc).as<Player>();
     process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
 
     //Draw background
@@ -183,6 +184,7 @@ int main()
     SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
 
     //Draw Other Players(s)
+    pc_room = client.call("get_room", pc.current_room).as<Room>();
     int count = client.call("get_mobsize").as<int>();
     int i = 1;
     while(i <= count)
@@ -203,6 +205,8 @@ int main()
     //Draw Ability Effects
     for (int i = 0; i < pc_room.ability_list.size(); i++)
     {
+      cout <<"K draw" <<endl;
+      cout << pc_room.ability_list.size() <<endl;
       Ability ability = pc_room.ability_list[i];
       SDL_Rect ability_rect = ability.hit_box;
       SDL_BlitSurface(images[ability.sprite], NULL, screenSurface, &ability_rect);
@@ -210,8 +214,11 @@ int main()
 
     //Draw HUD-related
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
+    //Health bar
+    //Mana bar
+    //Selected OffenseSelect portrait
+    //4 Ability icons
 
-    //Clear everything? / Renderer?
   }
 
   SDL_DestroyWindow(window);

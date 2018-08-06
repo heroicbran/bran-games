@@ -1,4 +1,5 @@
 #include "rpc/client.h"
+#include "mobs.h"
 
 void move_player(int canMove, rpc::client &client, Player &pc, SDL_Rect &pc_rect, char dir)
 {
@@ -397,7 +398,8 @@ void process_input(int &cursor, SDL_Event evt, Player &pc, int &menu, string &me
       //Attack key, regardless of equipped ability.
       case SDLK_k:
         //Check to see if anything is actually equipped. and check which curr_mon
-        pc.offense_select_list[pc.curr_mon].attack();
+        pc = client.call("sync_player", pc).as<Player>();
+        pc.call_action(1, client, pc);
         break;
     }
   }
