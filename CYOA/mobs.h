@@ -98,15 +98,8 @@ struct NPC : public Mob
 
 };
 
-struct OffenseSelect
-{
-   void attack(){}
-   void attack(rpc::client &client, Mob &pc){}
-   void use_ability(int ability_number){}
-   MSGPACK_DEFINE_ARRAY();
-};
 
-struct Weapon : public OffenseSelect
+struct Weapon
 {
   //Stats
   string name;
@@ -145,7 +138,7 @@ struct Weapon : public OffenseSelect
 
 };
 
-struct AllyMon : public OffenseSelect
+struct AllyMon
 {
   //Stats
   string name;
@@ -211,7 +204,6 @@ struct Player : public Mob
   //Modified Stats
 
   //Equipment Vars
-  string weapon;
   string armor;
   string accessory1;
   string accessory2;
@@ -221,15 +213,15 @@ struct Player : public Mob
   int curr_mon = 0;
 
   //List of weapon + 3 main monsters
-
-  vector<OffenseSelect> offense_select_list; //Includes weapon (0) and ally monsters (1-3)
+  Weapon weapon;
+  vector<AllyMon> monster_list; //Includes weapon (0) and ally monsters (1-3)
   vector<AllyMon> full_mon_list;
 
   //List of 10 reserve monsters (will increase limit as we go?)
 
 
   MSGPACK_DEFINE_ARRAY(name, hp_points, atk_points, def_points, char_points, level, levelup_points, experience, max_hp, hp, atk, def,
-    ele_weak, ele_strong, ele_block, x, y, w, h, dir, sprite_frame, sprite, inventory, current_room, player_id, weapon, armor, accessory1, accessory2, curr_mon, offense_select_list, full_mon_list);  //Note: Needed to make RPC function with custom type.
+    ele_weak, ele_strong, ele_block, x, y, w, h, dir, sprite_frame, sprite, inventory, current_room, player_id, weapon, armor, accessory1, accessory2, curr_mon, weapon, monster_list, full_mon_list);  //Note: Needed to make RPC function with custom type.
 
 
    Player()
@@ -268,6 +260,8 @@ struct Player : public Mob
         curr_mon++;
      else
         curr_mon = 0;
+
+    cout << "CURR: "<< curr_mon << endl;
    }
 
    //J
@@ -289,7 +283,7 @@ struct Player : public Mob
    }
 
    //K key = 1, J key = 2, L key = 3, I key = 4
-   void call_action(int action_number, rpc::client &client, Player &pc)
+   void call_action(int action_number, rpc::client &client)
    {
       cout << "1" <<endl;
       if(curr_mon == 0)
@@ -298,11 +292,11 @@ struct Player : public Mob
         {
           case 1:
             cout << "2" <<endl;
-            cout << "OS size: " << pc.offense_select_list.size() <<endl;
-            if (offense_select_list.size() >= 1)
+            cout << "OS size: " << this->monster_list.size() <<endl;
+            if (weapon.name != "none")
             {
               cout << "3" <<endl;
-              offense_select_list[0].attack(client, pc);
+              weapon.attack(client, *this);
             }
             break;
           case 2:

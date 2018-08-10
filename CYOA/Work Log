@@ -48,7 +48,8 @@ TO DO
 
 DEBUGGING
 ===========
-[ ] See about fixing stop during new direction?
+[ ] Seg fault in weapon create
+[ ] OffenseSelect[0] not working
 
 
 Scratch Pad

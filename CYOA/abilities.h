@@ -27,27 +27,36 @@ struct Ability
     //5xx will be aoe b
   };
 
-  SDL_Rect hit_box = {0, 0, 50, 50};
+  //SDL_Rect hit_box = {0, 0, 50, 50};
+  int x;
+  int y;
+  int w;
+  int h;
   int distance = 5; //Range is number steps the projectile will take before it fizzles
   int aoe_area = 0;
   int remaining_iterations = 4;
   string sprite = "item_twinkle";
   Mob user;
-  OffenseSelect user_os;
+  //OffenseSelect user_os;
+
+  MSGPACK_DEFINE_ARRAY(x, y, w, h, distance, aoe_area, remaining_iterations, sprite, user);
+  Ability()
+  {}
 
   Ability(int x_, int y_, int w_, int h_, string sprite_, Mob user_, bool distance_, int aoe_area_) :
          sprite(sprite_), user(user_), distance(distance_), aoe_area(aoe_area_)
   {
-     hit_box.x = x_;
-     hit_box.y = y_;
-     hit_box.w = w_;
-     hit_box.h = h_;
+     x = x_;
+     y = y_;
+     w = w_;
+     h = h_;
   }
 
   Mob collision_check(map<string, Mob> mobs)
   {
     Mob* null_mob = new Mob();
     map<string, Mob>::iterator it;
+    SDL_Rect hit_box = {x, y, w, h};
     for (it = mobs.begin(); it != mobs.end(); it++)
     {
       SDL_Rect collide_rect = {it->second.x, it->second.y, it->second.w, it->second.h};
@@ -83,7 +92,7 @@ struct Ability
 
 struct MeleeAttack : public Ability //Base for all melee attacks
 {
-   MeleeAttack (int x_, int y_, int w_, int h_, string sprite_, Mob user_, bool distance_, int aoe_area_) : Ability(x_, y_, w_, h_, sprite, user_, distance_, aoe_area_)
+   MeleeAttack (int x_, int y_, int w_, int h_, string sprite_, Mob user_, bool distance_, int aoe_area_) : Ability(x_, y_, w_, h_, sprite_, user_, distance_, aoe_area_)
    {
 
    }
@@ -94,7 +103,7 @@ struct ProjectileAttack : public Ability //Base for all projectile attacks
 {
   int curr_distance = distance;
 
-  ProjectileAttack (int x_, int y_, int w_, int h_, string sprite_, Mob user_, bool distance_, int aoe_area_) : Ability(x_, y_, w_, h_, sprite, user_, distance_, aoe_area_)
+  ProjectileAttack (int x_, int y_, int w_, int h_, string sprite_, Mob user_, bool distance_, int aoe_area_) : Ability(x_, y_, w_, h_, sprite_, user_, distance_, aoe_area_)
   {
 
   }

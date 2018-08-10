@@ -395,11 +395,17 @@ void process_input(int &cursor, SDL_Event evt, Player &pc, int &menu, string &me
         }
         break;
 
-      //Attack key, regardless of equipped ability.
+      //Attack key, regardless of active offense.
       case SDLK_k:
         //Check to see if anything is actually equipped. and check which curr_mon
         pc = client.call("sync_player", pc).as<Player>();
-        pc.call_action(1, client, pc);
+        pc.call_action(1, client);
+        break;
+
+      case SDLK_h:
+        //Check to see if anything is actually equipped. and check which curr_mon
+        pc.change_action_set();
+        client.call("player_update", pc);
         break;
     }
   }

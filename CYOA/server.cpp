@@ -30,8 +30,7 @@ Player add_player(string name)
 {
    Player* newMob = new Player(name);
    Weapon* new_weapon = new Weapon("Pocket Knife");
-   (*newMob).offense_select_list.push_back(*new_weapon);
-   cout << (*newMob).offense_select_list.size() <<endl;
+   newMob->weapon = *new_weapon;
    //Logic to determine which images to use
 
   if (player_list.find(name) == player_list.end())
@@ -162,7 +161,7 @@ void setup_room(string room_name)
   file_reader.open("rooms/" + room_name);
   int id;
 
-  Room* new_room = new Room();
+  Room* new_room = new Room(room_name);
 
   while(file_reader.getline(c_buffer, 256))
   {
@@ -219,8 +218,11 @@ void create_ability(Mob user, int ability_id)  //Don't need 2 types of creates
      switch(ability_id)
      {
        case 100:
-          MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y + 50, 50, 50, "item_twinkle", user, 0, 0);
+          MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y, 50, 50, "item_twinkle", user, 0, 0);
+          cout << room_list[user.current_room].ability_list.size() <<endl;
           room_list[user.current_room].ability_list.push_back(*melee_attack);
+          cout << room_list[user.current_room].ability_list.size()  <<endl;
+          //TODO: Don't let this loopS
           break;
      }
      //dir check and add to x or y by 50

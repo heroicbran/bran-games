@@ -188,7 +188,7 @@ int main()
     int count = client.call("get_mobsize").as<int>();
     int i = 1;
     while(i <= count)
-    {
+    { //Check for same room as you
       otherpc = client.call("get_players", (i-1)).as<Player>();
       if (pc.name != otherpc.name)
       {
@@ -203,12 +203,14 @@ int main()
     //Draw Monster(s)
 
     //Draw Ability Effects
+    pc_room = client.call("get_room", pc.current_room).as<Room>();
+    cout << pc_room.ability_list.size() <<endl;
+    cout << pc_room.room_name <<endl;
     for (int i = 0; i < pc_room.ability_list.size(); i++)
     {
-      cout <<"K draw" <<endl;
-      cout << pc_room.ability_list.size() <<endl;
+      cout <<"K draw 2" <<endl;
       Ability ability = pc_room.ability_list[i];
-      SDL_Rect ability_rect = ability.hit_box;
+      SDL_Rect ability_rect = {ability.x, ability.y, ability.w, ability.h};
       SDL_BlitSurface(images[ability.sprite], NULL, screenSurface, &ability_rect);
     }
 
