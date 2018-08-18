@@ -1,0 +1,76 @@
+TO DO
+===========
+[X] Enable Server hosting and user connection
+    [X] Establish Connection
+    [X] Generate a mob
+    [X] Place in starter area
+
+[~] Make a test room with a functionality
+    [~] Movememt  (Issue with W and N wall collision)
+    [X] Fuctioning Wall
+    [X] Fuctioning Door   (warp doors)
+    [~] Fuctioning Item   ((Allow using items)
+    [X] Fuctioning Player 2
+    [X] Client - Server communication
+    [X] Object State Updating
+        [X] Movement fixes (first moving direction 10 less than usual)
+
+[~] Extend to room generation from file(s)
+    [X] Walls
+    [ ] Doors
+    [ ] Background (scenic)
+    [ ] Items
+
+[ ] Beauty
+    [~] Sprite work upon moving
+    [ ] Skin colors
+    [ ] Clothing
+    [ ] Text
+    [ ] Backgrounds
+    [ ] HUDs
+
+[ ] Demo
+    [ ] 3 FriendlyMon
+       [ ] Starter
+       [ ] 2 Converted monsters
+    [ ] 2 Normal Monsters
+       [ ] Melee Attack
+       [ ] Ranged projecticle
+       [ ] Conversation
+       [ ] Boss with the above
+    [ ] Tutorial Dungeon
+       [ ] 3 normal rooms
+       [ ] 1 boss room
+       [ ] Save spot
+          [ ] Delete players when they leave?
+
+      Doing: Make 3 test Allied Mons, 3 test enemy mons, 1 attack (has knockback)
+
+DEBUGGING
+===========
+[ ] Seg fault in weapon create
+[ ] OffenseSelect[0] not working
+
+
+Scratch Pad
+=============
+Cross Compiling?
+
+FEATURES
+*Wall collis
+*Door control (SEARCH WITH DOOR TEST) [WORKING]
+*Pick up items -> Add to inventory
+----------------
+*Code organization
+*Room generation (Server side)
+> Server will use a file (or files) to generate initial room state.
+*RPC communication
+> Will use server to manage game world.
+> CLient can manage self.
+> Client sends updates of mob structure (and room when room affected w/ spinlocks)
+>> Using RPC
+> Server sends mob/room updates to everyone else
+
+>> 1 thread per PC to take all info from players
+>> 1 thread to talk back?
+>> 1 thread to handle updates
