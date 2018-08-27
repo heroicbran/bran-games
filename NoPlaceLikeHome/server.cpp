@@ -13,8 +13,6 @@ using namespace std;
 #include <chrono>
 #include <sstream>
 #include "inventory.h"
-
-#include "abilities.h"
 #include "mobs.h"
 #include "objects.h"
 #include "rooms.h"
@@ -24,17 +22,76 @@ using namespace std;
 
 
 //Maps for mob list and room list
-map<string, Player> player_list;
+map<string, Mob> player_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
+//Hour
+bool game_active = false;
+int starting_tokens = 1000;
+int hour = 1; //1 - 12 for day. (7am to 7am)
+int hour_length = 5; //Maximum of 10, minimum of 1 minute
+int day_count = 1;
+string time_of_day = "day"; //day or night
 
-
-
-Player add_player(string name)
+void time_flow()
 {
-   Player* newMob = new Player(name);
-   Weapon* new_weapon = new Weapon("Pocket Knife");
-   newMob->weapon = *new_weapon;
-   //Logic to determine which images to use
+  while(game_active)
+  {
+      sleep(hour_length * 60);
+      if (hour < 12)
+      {
+        hour++
+      }
+      else
+      {
+        //Call night phase
+        change_game_phase();
+        hour = 0; //night
+      }
+  }
+}
+
+void change_game_phase()
+{
+  if (time_of_day == "day")
+  {
+     time_of_day = "night";
+     //Exit Mini-games gracefully
+     //Exit HUD menu overlays
+     //Short Delay
+     //Play Music
+     //Fade to Black
+     //Move players to their rooms
+    //disable movement, give options menu
+  }
+  else
+  {
+     time_of_day = "day";
+     day_count++;
+     //Play scram sound
+     //MurderPlayer -> Make Ghost
+     //Fade to light
+
+  }
+
+}
+
+void start_game(string game_mode)
+{
+  if(game_mode == "mafia")
+  {
+     //Fade to Black
+     //Play intro cutscenes (show story, players, # killers)
+     //Place players in their rooms
+     //Start Time Flow
+  }
+
+
+
+}
+
+Mob add_player(string name)
+{
+   Mob* newMob = new Mob(name);
 
   if (player_list.find(name) == player_list.end())
   {
@@ -58,13 +115,13 @@ void check_rooms()
 
 }
 
-void player_update(Player pc)
+void player_update(Mob pc)
 {
   player_list[pc.name] = pc;
   cout << player_list[pc.name].name << " updated: " << player_list[pc.name].x << " " << player_list[pc.name].y <<endl;
 }
 
-Player sync_player(Player pc)
+Mob sync_player(Mob pc)
 {
   return player_list[pc.name];
 }
@@ -77,7 +134,7 @@ int get_mobsize()
 Mob get_players(int pos)
 {
   //Step through map and return Mobs at pos
-  map<string, Player>::iterator i = player_list.begin();
+  map<string, Mob>::iterator i = player_list.begin();
   while(pos-- > 0)
   {
     i++;
@@ -96,7 +153,7 @@ void use_door(int index, string room_name)
   room_list[room_name].door_list[index].toggle_door();
 }
 
-Item search_item(int item_id, Player pc)
+Item search_item(int item_id, Mob pc)
 {
   Item it;
   for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
@@ -107,7 +164,7 @@ Item search_item(int item_id, Player pc)
   return it;
 }
 
-int search_index(int item_id, Player pc)
+int search_index(int item_id, Mob pc)
 {
   for (int i = 0; i < room_list[pc.current_room].item_list.size(); i++)
   {
@@ -117,7 +174,7 @@ int search_index(int item_id, Player pc)
   return 0;
 }
 
-Mob obtain_item(int item_id, Player pc) //Change how mob is used?
+Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
 {
   int i;
   if (player_list[pc.name].inventory.size() < 4)
@@ -213,61 +270,6 @@ void setup_room(string room_name)
   room_list[new_room->room_name] = *new_room;
 }
 
-void create_ability_player(Player user, int ability_id)  //Don't need 2 types of creates
-{
-   if (ability_id >= 100)
-   {
-     //Make a switch for all types?
-     switch(ability_id)
-     {
-       case 100:
-          MeleeAttack* melee_attack = new MeleeAttack(user.x, user.y, 50, 50, "item_twinkle", user, 0, 0);
-          cout << room_list[user.current_room].ability_list.size() <<endl;
-          room_list[user.current_room].ability_list.push_back(*melee_attack);
-          cout << room_list[user.current_room].ability_list.size()  <<endl;
-          //TODO: Don't let this loopS
-          break;
-     }
-     //dir check and add to x or y by 50
-     //use id to create appropriate ability
-   }
-
-}
-
-void create_ability_monster(Monster user, int ability_id)
-{}
-
-
-void process_ability_update(Ability ability)
-{
-  ability.collision_check_player(player_list);
-  ability.ability_update();
-}
-
-void update_abilities()
-{
-   for (map<string,Room>::iterator it = room_list.begin(); it != room_list.end(); it++)
-   {
-      for (int i = 0; i < it->second.ability_list.size(); i++)
-      {
-          //TODO: ADD THREADS?
-          process_ability_update((it->second).ability_list[i]);
-          // first.join();
-          // second.join();
-      }
-
-   }
-   //Do collision check.
-   //If match, injure target, knock back, I-frames
-   //Else,call member function update
-
-   //Delete from room list if frames = 0
-}
-
-void update_monsters()
-{
-
-}
 
 
 int main()
@@ -293,8 +295,7 @@ int main()
   server.bind("get_room", &get_room);
   server.bind("use_door", &use_door);
   server.bind("obtain_item", &obtain_item);
-  server.bind("create_ability_player", &create_ability_player);
-  server.bind("create_ability_monster", &create_ability_monster);
+
   server.async_run(4);
   cout << "The server is now active." <<endl;
 
@@ -322,9 +323,6 @@ int main()
   //THIS CAN HAVE THINGS LIKE ENEMY BEHAVIOR CONTROL WITHIN LOOPS
   while(quit == 0)
   {
-    //Handle ability/Combat Rects and code (TODO: USE THREADS?)
-    update_abilities();
-    //Monster_phase, which loops through each monster and does action. Seek target, attack, reply to convo etc.
 
   }
   cin >> quit; //Just blocks.

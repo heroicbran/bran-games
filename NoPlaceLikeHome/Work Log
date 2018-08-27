@@ -30,19 +30,12 @@ TO DO
     [ ] HUDs
 
 [ ] Demo
-    [ ] 3 FriendlyMon
-       [ ] Starter
-       [ ] 2 Converted monsters
-    [ ] 2 Normal Monsters
-       [ ] Melee Attack
-       [ ] Ranged projecticle
-       [ ] Conversation
-       [ ] Boss with the above
-    [ ] Tutorial Dungeon
-       [ ] 3 normal rooms
-       [ ] 1 boss room
-       [ ] Save spot
-          [ ] Delete players when they leave?
+    [ ] Allow server to setup a game that can be joined
+    [ ] Title Screen and Character Creation (and store)
+    [ ] Add transition to first day (contestants, killer #, etc)
+    [ ] Test Simple vote @ day, kill @ night
+    [ ] Add option to fill slots with AI who do nothing but kill is necessary
+    [ ]
 
       Doing: Make 3 test Allied Mons, 3 test enemy mons, 1 attack (has knockback)
 

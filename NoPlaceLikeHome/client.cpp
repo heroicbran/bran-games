@@ -99,9 +99,9 @@ int main()
   load_images(images);
 
 
-  //Set up Player Stuff
-  Player pc = client.call("add_player", name).as<Player>();    //Retrieves initial player data
-  Player otherpc;
+  //Set up Mob Stuff
+  Mob pc = client.call("add_player", name).as<Mob>();    //Retrieves initial player data
+  Mob otherpc;
 
   if (pc.name.length() > 0)
     cout << pc.name << " has been added." << endl;
@@ -133,8 +133,8 @@ int main()
 
     //Do special events/cutscenes?
 
-    //User Input
-    pc = client.call("sync_player", pc).as<Player>();
+    pc = client.call("sync_player", pc).as<Mob>();
+    //User Input (Thread)
     process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
 
     //Draw background
@@ -143,8 +143,10 @@ int main()
     bg_rect = {0, 0, 1280, 760};
     SDL_BlitSurface(images[pc_room.background], NULL, screenSurface, &bg_rect);
 
-    //Boundaries (temporary)
+    // //Boundaries
     room_bounds = pc_room.wall_list;               //Get walls for room
+
+
     for(int j = 0; j < room_bounds.size(); j++)
     {
 
@@ -180,7 +182,31 @@ int main()
     }
 
     //Draw Player
-    pc = client.call("sync_player", pc).as<Player>();
+    pc = client.call("sync_player", pc).as<Mob>();
+
+    int frame_offset;
+    switch (pc.dir)
+    {
+      case 'D':
+         frame_offset = 0;
+         break;
+
+      case 'U':
+         frame_offset = (1 * pc.w);
+         break;
+
+      case 'R':
+         frame_offset = (2 * pc.w);
+         break;
+
+      case 'L':
+         frame_offset = (3 * pc.w);
+         break;
+
+    }
+
+
+    sprite_rect = {(0 + frame_offset), 0, pc.w, pc.h};
     SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
 
     //Draw Other Players(s)
@@ -189,37 +215,23 @@ int main()
     int i = 1;
     while(i <= count)
     { //Check for same room as you
-      otherpc = client.call("get_players", (i-1)).as<Player>();
+      otherpc = client.call("get_players", (i-1)).as<Mob>();
       if (pc.name != otherpc.name)
       {
         //cout << "draw other" <<endl;
         otpc_rect = {otherpc.x, otherpc.y, 100, 100};
-        SDL_BlitSurface(images[otherpc.sprite], NULL, screenSurface, &otpc_rect);
+        sprite_rect = {0, 0, otherpc.w, otherpc.h};
+        SDL_BlitSurface(images[otherpc.sprite], &sprite_rect, screenSurface, &otpc_rect);
 
       }
       i++;
     }
 
-    //Draw Monster(s)
+    //Draw Mini-Game Window (Thread?)
 
-    //Draw Ability Effects
-    pc_room = client.call("get_room", pc.current_room).as<Room>();
-    cout << pc_room.ability_list.size() <<endl;
-    cout << pc_room.room_name <<endl;
-    for (int i = 0; i < pc_room.ability_list.size(); i++)
-    {
-      cout <<"K draw 2" <<endl;
-      Ability ability = pc_room.ability_list[i];
-      SDL_Rect ability_rect = {ability.x, ability.y, ability.w, ability.h};
-      SDL_BlitSurface(images[ability.sprite], NULL, screenSurface, &ability_rect);
-    }
 
-    //Draw HUD-related
+    //Draw HUD-related (Thread?)
     draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
-    //Health bar
-    //Mana bar
-    //Selected OffenseSelect portrait
-    //4 Ability icons
 
   }
 
