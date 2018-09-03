@@ -31,7 +31,7 @@ TO DO
 
 [ ] Demo
     [ ] Allow server to setup a game that can be joined
-    [ ] Title Screen and Character Creation (and store)
+    [ ] Title Screen and Character Creation (and store data)
     [ ] Add transition to first day (contestants, killer #, etc)
     [ ] Test Simple vote @ day, kill @ night
     [ ] Add option to fill slots with AI who do nothing but kill is necessary

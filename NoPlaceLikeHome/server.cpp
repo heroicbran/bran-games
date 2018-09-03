@@ -12,6 +12,7 @@ using namespace std;
 #include <dirent.h>
 #include <chrono>
 #include <sstream>
+#include <unistd.h>
 #include "inventory.h"
 #include "mobs.h"
 #include "objects.h"
@@ -26,29 +27,13 @@ map<string, Mob> player_list;
 map<string, Room>room_list; //Room ID: Name needed for mob control
 //Hour
 bool game_active = false;
+int player_amount = 8;
 int starting_tokens = 1000;
 int hour = 1; //1 - 12 for day. (7am to 7am)
 int hour_length = 5; //Maximum of 10, minimum of 1 minute
 int day_count = 1;
 string time_of_day = "day"; //day or night
 
-void time_flow()
-{
-  while(game_active)
-  {
-      sleep(hour_length * 60);
-      if (hour < 12)
-      {
-        hour++
-      }
-      else
-      {
-        //Call night phase
-        change_game_phase();
-        hour = 0; //night
-      }
-  }
-}
 
 void change_game_phase()
 {
@@ -67,26 +52,150 @@ void change_game_phase()
   {
      time_of_day = "day";
      day_count++;
-     //Play scram sound
-     //MurderPlayer -> Make Ghost
+     //Play scream sound
+     //MurderedPlayer -> Make Ghost
      //Fade to light
 
   }
 
 }
 
-void start_game(string game_mode)
+void time_flow(string game_type)
 {
-  if(game_mode == "mafia")
+  if (game_type == "mafia")
   {
-     //Fade to Black
-     //Play intro cutscenes (show story, players, # killers)
-     //Place players in their rooms
-     //Start Time Flow
+      while(game_active)
+      {
+          sleep(hour_length * 60);
+          if (hour < 12)
+          {
+            hour++;
+          }
+          else
+          {
+            //Call night phase
+            change_game_phase();
+            hour = 0; //night
+          }
+      }
+   }
+
+}
+
+
+void move_to_starting_positions(string game_mode)
+{
+  if (game_mode == "mafia")
+  {
+    for(map<string, Mob>::iterator i = player_list.begin(); i != player_list.end(); i++)
+    {
+      switch(i->second.player_id)
+      {
+        case 1:
+           i->second.x = 50;
+           i->second.y = 50;
+           i->second.current_room = "player_room_1";
+           break;
+        case 2:
+           i->second.x = 100;
+           i->second.y = 100;
+           i->second.current_room = "player_room_2";
+           break;
+        /*case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:*/
+      }
+    }
   }
 
+}
+
+void setup_rooms(string room_name)
+{
+  string buffer;
+  char c_buffer[256];
+  string entry;
+  ifstream file_reader;
+  ifstream str_reader;
+  vector<string> tokens;
+  file_reader.open("rooms/" + room_name);
+  int id;
+
+  while(file_reader.getline(c_buffer, 256))
+  {
+    buffer = c_buffer;
+    stringstream stream (buffer);
+    getline(stream, entry, ' '); //Get first char
+
+    if (entry[0] == 'n')
+    {
+      getline(stream, entry, ' ');
+      Room* new_room = new Room(entry);
+      while(getline(stream, entry, ' '))
+      {
+        switch(entry[0])
+        {
+          case 'b':
+            getline(stream, entry, ' ');
+            new_room->background = entry;
+            break;
+
+          case 'w':
+            Wall* new_wall = new Wall();
+            getline(stream, entry, ' ');
+            new_wall->sprite = entry;
+
+            getline(stream, entry, ' ');
+            new_wall->x = stoi(entry);
+
+            getline(stream, entry, ' ');
+            new_wall->y = stoi(entry);
+
+            getline(stream, entry, ' ');
+            new_wall->w = stoi(entry);
+
+            getline(stream, entry, ' ');
+            new_wall->h = stoi(entry);
+
+            new_room->wall_list.push_back(*new_wall);
+            break;
+
+        //  case 'd':
+          //  break;
+
+          //case 'i':
+          //  break;
+
+        }
+      }
+      room_list[new_room->room_name] = *new_room;
+    }
+  }
+}
 
 
+void start_game(string game_mode)
+{
+  if (game_mode == "mafia")
+  {
+     if(player_list.size() == player_amount)
+     {
+       //create rooms
+       setup_rooms("mafia");
+       //Fade to Black
+       //Play intro cutscenes (show story, players, # killers)
+       move_to_starting_positions("mafia");
+       game_active = true;
+       time_flow("mafia");
+     }
+     else
+     {
+       cout << "Not enough players!" <<endl;
+     }
+  }
 }
 
 Mob add_player(string name)
@@ -105,15 +214,8 @@ Mob add_player(string name)
   return player_list[name];
 }
 
-void check_mobs()
-{
-
-}
-
-void check_rooms()
-{
-
-}
+Mob add_bots()
+{}
 
 void player_update(Mob pc)
 {
@@ -210,68 +312,6 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
 void drop_item()
 {}
 
-void setup_room(string room_name)
-{
-  string buffer;
-  char c_buffer[256];
-  string entry;
-  ifstream file_reader;
-  ifstream str_reader;
-  vector<string> tokens;
-  file_reader.open("rooms/" + room_name);
-  int id;
-
-  Room* new_room = new Room(room_name);
-
-  while(file_reader.getline(c_buffer, 256))
-  {
-    buffer = c_buffer;
-    stringstream stream (buffer);
-    getline(stream, entry, ' '); //Get first char
-    switch(entry[0])
-    {
-      case '#':
-        getline(stream, entry, ' ');
-        id = stoi(entry);
-        break;
-
-      case 'n':
-        getline(stream, entry, ' ');
-        new_room->room_name = entry;
-        break;
-
-      case 'b':
-        getline(stream, entry, ' ');
-        new_room->background = entry;
-        break;
-
-      case 'w':
-        Wall* new_wall = new Wall();
-        getline(stream, entry, ' ');
-        new_wall->sprite = entry;
-
-        getline(stream, entry, ' ');
-        new_wall->x = stoi(entry);
-
-        getline(stream, entry, ' ');
-        new_wall->y = stoi(entry);
-
-        getline(stream, entry, ' ');
-        new_wall->w = stoi(entry);
-
-        getline(stream, entry, ' ');
-        new_wall->h = stoi(entry);
-
-        new_room->wall_list.push_back(*new_wall);
-        break;
-
-    }
-  }
-  room_list[new_room->room_name] = *new_room;
-}
-
-
-
 int main()
 {
   string ip;
@@ -302,7 +342,6 @@ int main()
 
   //Initialize Game State (Rooms)
 
-  setup_room("test");
 /*  Room testRoom = Room();
   Door d = Door(0, 0, 0, "door", 300, 300, 100, 100);
   testRoom.door_list.push_back(d);
@@ -320,7 +359,6 @@ int main()
 
   room_list["test"] = testRoom;*/
 
-  //THIS CAN HAVE THINGS LIKE ENEMY BEHAVIOR CONTROL WITHIN LOOPS
   while(quit == 0)
   {
 

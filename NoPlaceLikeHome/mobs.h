@@ -26,10 +26,10 @@ struct Mob
   string role; //Innocent, Killer, Clue_Killer
 
   //Add color options
-  int skin;
-  int hair;
-  int shirt;
-  int bottoms;
+  int skin = 0;
+  int hair = 0;
+  int shirt = 0;
+  int bottoms = 0;
 
   char dir = 'D';
   int sprite_frame = 0; //Frames 0 - 3.
@@ -38,9 +38,9 @@ struct Mob
   int tokens = 0;
   string current_room = "test"; //Room being occupied by mob
   //int is_player = 0; //Used for PC
-  int player_id;
+  int player_id = 0;
   MobType mob_type;
-  MSGPACK_DEFINE_ARRAY(name, sex, x, y, w, h, role, skin, hair, shirt, bottoms
+  MSGPACK_DEFINE_ARRAY(name, sex, x, y, w, h, role, skin, hair, shirt, bottoms,
        dir, sprite_frame, sprite, inventory, tokens, current_room, player_id);  //Note: Needed to make RPC function with custom type.
 
   Mob(string n) : name{n}, x{0}, y{0}

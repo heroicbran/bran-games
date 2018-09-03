@@ -1,0 +1,56 @@
+// Format
+//===========
+//# number of rooms
+//n name (Room name)
+//b background_name
+//w w.x w.y w.w w.h (Wall and its coords)
+//non-solid decor?
+//d id open locked sprite d.x d.y d.w d.h warp_x warp_y warp_room (Door and its coords)
+//i i.name (Item and its coords)
+
+
+2
+
+
+// Player Room 1
+//===========
+n player_room_1
+b grid
+w none -1 -1 1280 1
+w none -1 -1 1 760
+w none 1280 -1 1 760
+w none -1 760 1280 1
+w none 500 0 100 100
+d door 700 700 0 0 dorm
+i test_item
+i test_item2
+
+// Player Room 2
+//===========
+n player_room_2
+b grid
+w none -1 -1 1280 1
+w none -1 -1 1 760
+w none 1280 -1 1 760
+w none -1 760 1280 1
+w none 500 0 100 100
+d door 300 300 0 0 dorm
+i test_item
+i test_item2
+
+// Dorm
+//===========
+n dorm
+b grid
+w none -1 -1 1280 1
+w none -1 -1 1 760
+w none 1280 -1 1 760
+w none -1 760 1280 1
+w none 500 0 100 100
+d door 300 300 0 0 dorm
+i test_item
+i test_item2
+
+
+
+// (END OF FILE)
