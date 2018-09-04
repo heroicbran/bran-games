@@ -41,7 +41,7 @@ void load_images(map<string, SDL_Surface*> &images)
   //Title Screens
   //-------------------------------
   SDL_Surface* mafia_title = new SDL_Surface;
-  grid = IMG_Load("images/mafia_title_card.png");
+  mafia_title = IMG_Load("images/mafia_title.png");
   images["mafia_title"] = mafia_title;
 
 
