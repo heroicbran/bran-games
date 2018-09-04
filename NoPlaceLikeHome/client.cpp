@@ -138,17 +138,16 @@ int main()
 
         }
 
-
         pc = client.call("sync_player", pc).as<Mob>();
         //User Input (Thread)
         process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds);
 
         //Black background
-        SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+        //SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
 
         //Draw Title background
         bg_rect = {0, 0, 1280, 760};
-        SDL_BlitSurface(images["mafia_title_card"], NULL, screenSurface, &bg_rect);
+        SDL_BlitSurface(images["mafia_title"], NULL, screenSurface, &bg_rect);
 
     }
 
