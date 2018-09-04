@@ -6,12 +6,6 @@ using namespace std;
 
 struct Mob
 {
-  enum MobType
-  {
-    player = 0,
-    monster = 1,
-    npc = 2
-  };
 
   //Character Info
   string name = "null";
@@ -39,9 +33,10 @@ struct Mob
   string current_room = "test"; //Room being occupied by mob
   //int is_player = 0; //Used for PC
   int player_id = 0;
-  MobType mob_type;
+  int mob_type = 0; //0 is player, 1 is bot
+  bool host = false;
   MSGPACK_DEFINE_ARRAY(name, sex, x, y, w, h, role, skin, hair, shirt, bottoms,
-       dir, sprite_frame, sprite, inventory, tokens, current_room, player_id);  //Note: Needed to make RPC function with custom type.
+       dir, sprite_frame, sprite, inventory, tokens, current_room, player_id, mob_type, host);  //Note: Needed to make RPC function with custom type.
 
   Mob(string n) : name{n}, x{0}, y{0}
   {

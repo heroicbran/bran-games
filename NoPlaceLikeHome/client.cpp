@@ -100,11 +100,11 @@ int main()
 
 
   //Set up Mob Stuff
-  Mob pc = client.call("add_player", name).as<Mob>();    //Retrieves initial player data
+  Mob pc = client.call("connect_player", name).as<Mob>();    //Retrieves initial player data
   Mob otherpc;
 
   if (pc.name.length() > 0)
-    cout << pc.name << " has been added." << endl;
+    cout << pc.name << " has connected." << endl;
 
   //PC Inventory
   //Starts off as empty inventory
@@ -124,115 +124,146 @@ int main()
 
   while(!quit)
   {
-    SDL_UpdateWindowSurface(window);
-    SDL_WaitEvent(&evt);
+
+    //Processing During Intro screen
+    while (!client.call("check_if_game_active").as<bool>() && !quit)
+    {
+        SDL_UpdateWindowSurface(window);
+        SDL_WaitEvent(&evt);
 
 
-    if(evt.type == SDL_QUIT)
-      quit = 1;
+        if(evt.type == SDL_QUIT)
+        {
+          quit = 1;
 
-    //Do special events/cutscenes?
-
-    pc = client.call("sync_player", pc).as<Mob>();
-    //User Input (Thread)
-    process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds); //TODO: Combine room_bounds + visible walls
-
-    //Draw background
-    SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
-    pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
-    bg_rect = {0, 0, 1280, 760};
-    SDL_BlitSurface(images[pc_room.background], NULL, screenSurface, &bg_rect);
-
-    // //Boundaries
-    room_bounds = pc_room.wall_list;               //Get walls for room
+        }
 
 
-    for(int j = 0; j < room_bounds.size(); j++)
+        pc = client.call("sync_player", pc).as<Mob>();
+        //User Input (Thread)
+        process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds);
+
+        //Black background
+        SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x00, 0x00, 0x00));
+
+        //Draw Title background
+        bg_rect = {0, 0, 1280, 760};
+        SDL_BlitSurface(images["mafia_title_card"], NULL, screenSurface, &bg_rect);
+
+    }
+
+
+    //Processing During Gameplay
+    while (client.call("check_if_game_active").as<bool>() && !quit)
     {
 
-      //TODO: UPDATE WALL TREATMENT TO BE LIKE HOW DOORS WORK.SAVE TO VECTOR AND PASS TO PROCESS INPUT
-      SDL_Rect bound_rect;
-      bound_rect = {room_bounds[j].x, room_bounds[j].y, room_bounds[j].w, room_bounds[j].h};
-      bound_rect.h = 500;
-      SDL_Surface* bound = SDL_CreateRGBSurface(0, room_bounds[j].w, room_bounds[j].h, 32, 0, 0, 0, 0);
-      SDL_FillRect(bound, NULL, SDL_MapRGB(bound->format, 0x00, 0x00, 0xFF));
-      SDL_BlitSurface(bound, NULL, screenSurface, &bound_rect);
+        SDL_UpdateWindowSurface(window);
+        SDL_WaitEvent(&evt);
+
+
+        if(evt.type == SDL_QUIT)
+          quit = 1;
+
+        pc = client.call("sync_player", pc).as<Mob>();
+        //User Input (Thread)
+        process_input(cursor, evt, pc, menu, menu_type, pc_rect, hud_rect, quit, client, door_rects, item_rects, pc_room.door_list, room_bounds);
+
+        //Draw background
+        SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+        pc_room = client.call("get_room", pc.current_room).as<Room>(); //Gets the room (Also happens upon room change)
+        bg_rect = {0, 0, 1280, 760};
+        SDL_BlitSurface(images[pc_room.background], NULL, screenSurface, &bg_rect);
+
+        // //Boundaries
+        room_bounds = pc_room.wall_list;               //Get walls for room
+
+
+        for(int j = 0; j < room_bounds.size(); j++)
+        {
+
+          //TODO: UPDATE WALL TREATMENT TO BE LIKE HOW DOORS WORK.SAVE TO VECTOR AND PASS TO PROCESS INPUT
+          SDL_Rect bound_rect;
+          bound_rect = {room_bounds[j].x, room_bounds[j].y, room_bounds[j].w, room_bounds[j].h};
+          bound_rect.h = 500;
+          SDL_Surface* bound = SDL_CreateRGBSurface(0, room_bounds[j].w, room_bounds[j].h, 32, 0, 0, 0, 0);
+          SDL_FillRect(bound, NULL, SDL_MapRGB(bound->format, 0x00, 0x00, 0xFF));
+          SDL_BlitSurface(bound, NULL, screenSurface, &bound_rect);
+        }
+
+        //Walls (Decor)
+        //TODO
+
+        //Doors
+        pc_room = client.call("get_room", pc.current_room).as<Room>();
+        door_rects.clear();
+        for (int j = 0; j < pc_room.door_list.size(); j++)
+        {
+            door_rect = {pc_room.door_list[j].x, pc_room.door_list[j].y, pc_room.door_list[j].w, pc_room.door_list[j].h};
+            door_rects.push_back(door_rect);
+            SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door_rect);
+        }
+
+        //items
+        item_rects.clear();
+        for (int ii = 0; ii < pc_room.item_list.size(); ii++)
+        {
+            item_rect = {pc_room.item_list[ii].x, pc_room.item_list[ii].y, 50, 50};
+            item_rects.push_back(item_rect);
+            SDL_BlitSurface(images["item_twinkle"], NULL, screenSurface, &item_rect);
+        }
+
+        //Draw Player
+        pc = client.call("sync_player", pc).as<Mob>();
+
+        int frame_offset;
+        switch (pc.dir)
+        {
+          case 'D':
+             frame_offset = 0;
+             break;
+
+          case 'U':
+             frame_offset = (1 * pc.w);
+             break;
+
+          case 'R':
+             frame_offset = (2 * pc.w);
+             break;
+
+          case 'L':
+             frame_offset = (3 * pc.w);
+             break;
+
+        }
+
+
+        sprite_rect = {(0 + frame_offset), 0, pc.w, pc.h};
+        SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
+
+        //Draw Other Players(s)
+        pc_room = client.call("get_room", pc.current_room).as<Room>();
+        int count = client.call("get_mobsize").as<int>();
+        int i = 1;
+        while(i <= count)
+        { //Check for same room as you
+          otherpc = client.call("get_players", (i-1)).as<Mob>();
+          if (pc.name != otherpc.name)
+          {
+            //cout << "draw other" <<endl;
+            otpc_rect = {otherpc.x, otherpc.y, 100, 100};
+            sprite_rect = {0, 0, otherpc.w, otherpc.h};
+            SDL_BlitSurface(images[otherpc.sprite], &sprite_rect, screenSurface, &otpc_rect);
+
+          }
+          i++;
+        }
+
+        //Draw Mini-Game Window (Thread?)
+
+
+        //Draw HUD-related (Thread?)
+        draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
     }
-
-    //Walls (Decor)
-    //TODO
-
-    //Doors
-    pc_room = client.call("get_room", pc.current_room).as<Room>();
-    door_rects.clear();
-    for (int j = 0; j < pc_room.door_list.size(); j++)
-    {
-        door_rect = {pc_room.door_list[j].x, pc_room.door_list[j].y, pc_room.door_list[j].w, pc_room.door_list[j].h};
-        door_rects.push_back(door_rect);
-        SDL_BlitSurface(images[pc_room.door_list[j].sprite], NULL, screenSurface, &door_rect);
-    }
-
-    //items
-    item_rects.clear();
-    for (int ii = 0; ii < pc_room.item_list.size(); ii++)
-    {
-        item_rect = {pc_room.item_list[ii].x, pc_room.item_list[ii].y, 50, 50};
-        item_rects.push_back(item_rect);
-        SDL_BlitSurface(images["item_twinkle"], NULL, screenSurface, &item_rect);
-    }
-
-    //Draw Player
-    pc = client.call("sync_player", pc).as<Mob>();
-
-    int frame_offset;
-    switch (pc.dir)
-    {
-      case 'D':
-         frame_offset = 0;
-         break;
-
-      case 'U':
-         frame_offset = (1 * pc.w);
-         break;
-
-      case 'R':
-         frame_offset = (2 * pc.w);
-         break;
-
-      case 'L':
-         frame_offset = (3 * pc.w);
-         break;
-
-    }
-
-
-    sprite_rect = {(0 + frame_offset), 0, pc.w, pc.h};
-    SDL_BlitSurface(images[pc.sprite], &sprite_rect, screenSurface, &pc_rect);  //TODO: FIX SPRITES
-
-    //Draw Other Players(s)
-    pc_room = client.call("get_room", pc.current_room).as<Room>();
-    int count = client.call("get_mobsize").as<int>();
-    int i = 1;
-    while(i <= count)
-    { //Check for same room as you
-      otherpc = client.call("get_players", (i-1)).as<Mob>();
-      if (pc.name != otherpc.name)
-      {
-        //cout << "draw other" <<endl;
-        otpc_rect = {otherpc.x, otherpc.y, 100, 100};
-        sprite_rect = {0, 0, otherpc.w, otherpc.h};
-        SDL_BlitSurface(images[otherpc.sprite], &sprite_rect, screenSurface, &otpc_rect);
-
-      }
-      i++;
-    }
-
-    //Draw Mini-Game Window (Thread?)
-
-
-    //Draw HUD-related (Thread?)
-    draw_menu(cursor, menu, menu_type, hud_rect, pc, screenSurface, images);
-
   }
 
   SDL_DestroyWindow(window);

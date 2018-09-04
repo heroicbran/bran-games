@@ -40,4 +40,14 @@ void load_images(map<string, SDL_Surface*> &images)
   SDL_Surface* shadow = new SDL_Surface;
   grid = IMG_Load("images/shadow.png");
   images["shadow"] = shadow;
+
+  //Title Screens\
+  -------------------------------
+  SDL_Surface* mafia_title_card = new SDL_Surface;
+  grid = IMG_Load("images/mafia_title_card.png");
+  images["mafia_title_card"] = mafia_title_card;
+
+
+  //Player Appearance\
+  -------------------------------
 }

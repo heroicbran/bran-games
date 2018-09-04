@@ -23,17 +23,24 @@ using namespace std;
 
 
 //Maps for mob list and room list
-map<string, Mob> player_list;
+map<string, Mob> player_list; //List of connected people.
+
+map<string, Mob> contestant_list; //List of pc and bots in a given game
+
 map<string, Room>room_list; //Room ID: Name needed for mob control
 //Hour
 bool game_active = false;
-int player_amount = 8;
+int min_contestant_count = 2;
 int starting_tokens = 1000;
 int hour = 1; //1 - 12 for day. (7am to 7am)
 int hour_length = 5; //Maximum of 10, minimum of 1 minute
 int day_count = 1;
 string time_of_day = "day"; //day or night
 
+bool check_if_game_active()
+{
+  return game_active;
+}
 
 void change_game_phase()
 {
@@ -176,12 +183,23 @@ void setup_rooms(string room_name)
   }
 }
 
+//Host Commands\
+-------------------
+void change_hour_length(int length)
+{
+  hour_length = length;
+}
 
-void start_game(string game_mode)
+void change_min_contestant_count(int min)
+{
+  min_contestant_count = min;
+}
+
+bool start_game(string game_mode)
 {
   if (game_mode == "mafia")
   {
-     if(player_list.size() == player_amount)
+     if(player_list.size() >= min_contestant_count && contestant_list.size() <= 8)
      {
        //create rooms
        setup_rooms("mafia");
@@ -193,23 +211,85 @@ void start_game(string game_mode)
      }
      else
      {
-       cout << "Not enough players!" <<endl;
+       return false;
      }
+     return true;
   }
 }
 
-Mob add_player(string name)
+//Player Commands\
+---------------------
+void player_customize(Mob mob, int component, string name) //Component is skin, hair, shirt, etc.
+{
+  switch(component)
+  {
+    case 1:
+      if (player_list[mob.name].skin < 9)
+      {
+        player_list[mob.name].skin++;
+      }
+      else
+      {
+        player_list[mob.name].skin = 0;
+      }
+      break;
+    case 2:
+      if (player_list[mob.name].hair < 9)
+      {
+        player_list[mob.name].hair++;
+      }
+      else
+      {
+        player_list[mob.name].hair = 0;
+      }
+      break;
+    case 3:
+      if (player_list[mob.name].shirt < 9)
+      {
+        player_list[mob.name].shirt++;
+      }
+      else
+      {
+        player_list[mob.name].shirt = 0;
+      }
+      break;
+    case 4:
+      if (player_list[mob.name].bottoms < 9)
+      {
+        player_list[mob.name].bottoms++;
+      }
+      else
+      {
+        player_list[mob.name].bottoms = 0;
+      }
+      break;
+    case 5: //name
+      player_list[mob.name].name = name;
+
+  }
+}
+
+void join_game(Mob mob)
+{
+
+}
+
+
+Mob connect_player(string name)
 {
    Mob* newMob = new Mob(name);
 
   if (player_list.find(name) == player_list.end())
   {
     player_list[name] = *newMob;
+    if (player_list.size() == 1)
+      player_list[name].host = true;
+
     cout << "New Player: " << player_list[name].name << endl;
   }
   else
   {
-    //Make mob with modified name with num attached?
+    //Connect player to their existing mob
   }
   return player_list[name];
 }
@@ -309,8 +389,7 @@ Mob obtain_item(int item_id, Mob pc) //Change how mob is used?
   return player_list[pc.name];
 }
 
-void drop_item()
-{}
+
 
 int main()
 {
@@ -327,12 +406,30 @@ int main()
 
   //Set up server, bind each of the commands for peer
   rpc::server server(port);
-  server.bind("add_player", &add_player);
+  server.bind("connect_player", &connect_player);
   server.bind("player_update", &player_update);
   server.bind("sync_player", &sync_player);
   server.bind("get_mobsize", &get_mobsize);
   server.bind("get_players", &get_players);
   server.bind("get_room", &get_room);
+  server.bind("check_if_game_active", &check_if_game_active);
+
+  //Host Commands\
+  -------------------
+  //Change Mode
+  server.bind("change_hour_length", &change_hour_length);
+  server.bind("change_min_contestant_count", &change_min_contestant_count);
+  server.bind("start_game", &start_game);
+  //End game
+
+  //Player Commands\
+  ---------------------
+  server.bind("player_customzie", &player_customize);
+  server.bind("join_game", &join_game);
+  //Spectate
+
+  //Player controls\
+  ----------------------
   server.bind("use_door", &use_door);
   server.bind("obtain_item", &obtain_item);
 
